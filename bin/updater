@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+var updater = require('../lib/updater-cli');
+
+updater.start(function (err) {
+  if (!err) {
+    updater.log.info('MD-Updater'.grey + ' ok'.green.bold);
+  }
+
+  process.stdout.on('drain', function () {
+    process.exit(err ? 1 : 0);
+  });
+});

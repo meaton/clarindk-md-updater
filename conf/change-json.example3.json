@@ -1,0 +1,7 @@
+[{
+  "change_type": "override",
+  "field_position": { "olac:olac": "dc:contributor" },
+  "condition": { "olac:code": "depositor" },
+  "selector": "$t",
+  "set_value": "cst.ku.dk"
+}]

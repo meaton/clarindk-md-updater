@@ -1,0 +1,7 @@
+*~
+*.swp
+*.log
+conf/*.txt
+node_modules
+misc
+test/misc
