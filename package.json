@@ -22,7 +22,7 @@
      "bin":"./bin"
   },
   "bin": {
-    "clarin-md-updater": "./bin/updater"
+    "clarindk-md-updater": "./bin/updater"
   },
   "scripts": {
     "test": "mocha -R spec",
