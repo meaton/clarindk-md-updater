@@ -1,11 +1,13 @@
 {
   "directories": {},
-  "escidoc_handle": "ESCIDOC-kBwIAYWLh91366106047304",
+  "escidoc_handle": "ESCIDOC-YLuFIjdd2T1370600399272",
   "mongoose_auth": "mongodb://localhost/metadata_test",
   "targetUrl": "http://devtools.clarin.dk",
   "updaterHost": "localhost",
   "updaterPort": "8082",
   "fullname": "Mitchell Seaton",
   "email": "seaton@hum.ku.dk",
-  "colors": true
+  "colors": true,
+  "useBatch": false,
+  "batchLimit": "10"
 }
