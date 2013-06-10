@@ -7,7 +7,7 @@ updater.start(function (err) {
     updater.log.info('MD-Updater'.grey + ' ok'.green.bold);
   }
 
-  process.stdout.on('drain', function () {
+  process.stdout.on('drain', function() {
     process.exit(err ? 1 : 0);
   });
 });

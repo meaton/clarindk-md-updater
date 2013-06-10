@@ -1,6 +1,6 @@
 {
   "name": "clarindk-md-updater",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A CLI for Metadata Record updates to CLARIN-DK via eSciDoc MD-Updater RESTful service.",
   "keywords": ["cli","metadata","updater","escidoc","repository","xml","harvest","oai","olac"],
   "author": "Mitchell Seaton <seaton@hum.ku.dk>",
