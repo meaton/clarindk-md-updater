@@ -1,0 +1,12 @@
+[
+   {
+      "change_type":"addition",
+      "field_position":{
+         "olac:olac":"dc:subject"
+      },
+      "properties":{
+         "xmlns:dc":"http://purl.org/dc/elements/1.1/",
+         "$t":"byggeri (DK5-69)"
+      }
+   }
+]

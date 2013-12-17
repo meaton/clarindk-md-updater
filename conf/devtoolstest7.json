@@ -1,0 +1,13 @@
+[
+   {
+      "change_type":"override",
+      "field_position":{
+         "CMD": { "Components": { "olac":"language" } }
+      },
+      "conditions":{
+         "$t":"ISO639-3:dan"
+      },
+      "selector":"$t",
+      "set_value":"da"
+   }
+]

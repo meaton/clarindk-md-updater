@@ -1,0 +1,10 @@
+[
+   {
+      "change_type":"override",
+      "field_position":{
+         "CMD": { "Components": { "olac":"subject" } }
+      },
+      "selector":"$t",
+      "set_value":"unspecified"
+   }
+]

@@ -1,0 +1,11 @@
+[
+   {
+      "change_type":"override",
+      "field_position":{
+         "olac:olac":"dc:subject"
+      },
+      "conditions": {"$t":"Sundhed og medicin"},
+      "selector":"$t",
+      "set_value":"helbred (DK5-61)"
+   }
+]

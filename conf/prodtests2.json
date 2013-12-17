@@ -1,0 +1,28 @@
+[
+   {
+      "change_type":"override",
+      "field_position":{
+         "olac:olac":"dc:language"
+      },
+      "selector":"$t",
+      "set_value":""
+   },
+   {
+      "change_type":"override",
+      "field_position":{
+         "olac:olac":"dc:language"
+      },
+      "add_attr":"true",
+      "selector":"xsi:type",
+      "set_value":"olac:language"
+   },
+   {
+      "change_type":"override",
+      "field_position":{
+         "olac:olac":"dc:language"
+      },
+      "add_attr":"true",
+      "selector":"olac:code",
+      "set_value":"da"
+   }
+]

@@ -1,0 +1,11 @@
+[
+   {
+      "change_type":"override",
+      "field_position":{
+         "olac:olac":"dc:publisher"
+      },
+      "conditions": { "$t": "dsn" },
+      "selector":"$t",
+      "set_value":"dsn.dk"
+   }
+]
