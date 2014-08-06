@@ -92,9 +92,9 @@ Set CLI configuration appropriately, updaterHost and updaterPort parameters for 
 }
 ``
 
-###Appendix B: Change-Rules Configuration
+###Appendix B: Example JSON Change-Rules Configuration
 
-#####Example Change-rules JSON (override rule):
+#####Override rule:
 Replace the entire value selected with a new value.
 >``
 [{
@@ -112,7 +112,7 @@ Replace the entire value selected with a new value.
 }]
 ``
 
-#####Example Change-rules JSON (addition rule):
+#####Addition rule:
 Add a new Metadata element to the record, including defined attributes and text value.
 >``
 [{
@@ -129,12 +129,12 @@ Add a new Metadata element to the record, including defined attributes and text 
 }]
 ``
 
-#####Example Change-rules JSON (replace rule):
+#####Replace rule:
 Match and replace a string from the selected value and replace the first match found with the new value. Regular Expressions may be used also, and for global replacement.
 
 >``
 [{ 
-  "change_type":"addition",
+  "change_type":"replace",
   "field_position":{
      "olac:olac":"dc:contributor"
   },
