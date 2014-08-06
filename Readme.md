@@ -11,13 +11,13 @@ A Node.js Flatiron-CLI application to retrieve and update [eSciDoc](http://www.e
 ####Installation
 See https://github.com/joyent/node/wiki/Installation for installation of Node.js.
 
-``npm install clarindk-md-updater``
+``$ npm install clarindk-md-updater``
 
 ####MongoDB installation
 [Installation](http://docs.mongodb.org/manual/installation/)
 
 ####Usage
-Run ``clarindk-md-updater help`` for usage details.
+Run ``$ clarindk-md-updater help`` for usage details.
 
 - - -
 
