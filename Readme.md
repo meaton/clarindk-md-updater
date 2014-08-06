@@ -5,7 +5,7 @@ A Node.js Flatiron-CLI application to retrieve and update eSciDoc Metadata recor
 ####Requirements
 * Node.js >= 0.6 (http://nodejs.org/)
 * NPM (http://npmjs.org/) included with Node.js
-* eSciDoc MD-Updater (https://github.com/escidoc/escidoc-metadata-updater)
+* eSciDoc Metadata-Updater (https://github.com/escidoc/escidoc-metadata-updater)
 * eSciDoc >= 1.3.x (http://www.escidoc.org)
 * MongoDB (http://www.mongodb.org/)
 
@@ -63,8 +63,8 @@ Removes existing query record and associated metadata records from the session.
 
 - - -
 
-###Deploying eSciDoc MD-Updater
-An RESTful updater service to eSciDoc. Additionally provides the service of retrieving MD-records for an item, in XML-format output. The XML can be edited and an updated document can be uploaded to eSciDoc via the service. Handles the authentication process with either eSciDoc handle cookie or Basic auth login method. 
+###Deploying eSciDoc Metadata-Updater
+An RESTful updater service to eSciDoc. Additionally provides the service of retrieving metadata records for an item, in XML-format output. The XML can be edited and an updated document can be uploaded to eSciDoc via the service. Handles the authentication process with either eSciDoc handle cookie or Basic auth login method. 
    
 See https://github.com/escidoc/escidoc-metadata-updater for further details.
 
@@ -77,7 +77,7 @@ Set CLI configuration appropriately, updaterHost and updaterPort parameters for 
 ###Appendix A: Default CLI Configuration
 
 #####Sample config file data/config.JSON:
-``
+>``
 {
   "directories": {},
   "escidoc_handle": "ESCIDOC-XXXXXXX",
@@ -92,10 +92,10 @@ Set CLI configuration appropriately, updaterHost and updaterPort parameters for 
 
 ###Appendix B: Change-Rules Configuration
 
-Available change-rule types include “override”, “addition” and "replace".
 
-#####Sample Change-rules JSON (override rule):
-``
+#####Example Change-rules JSON (override rule):
+Replace the entire value selected with a new value.
+>``
 [{
   "change_type": "override",
   "field_position": { "olac:olac": "dc:contributor" },
@@ -111,8 +111,9 @@ Available change-rule types include “override”, “addition” and "replace"
 }]
 ``
 
-#####Sample Change-rules JSON (addition rule):
-``
+#####Example Change-rules JSON (addition rule):
+Add a new Metadata element to the record, including defined attributes and text value.
+>``
 [{
   "change_type":"addition",
   "field_position":{
@@ -125,4 +126,11 @@ Available change-rule types include “override”, “addition” and "replace"
      "$t":"dsn.dk"
   }
 }]
+``
+
+#####Example Change-rules JSON (replace rule):
+Match and replace a string from the selected value and replace the first match found with the new value. Regular Expressions may be used also, and for global replacement.
+
+>``
+[{ "change_type": "replace", "field_position": { "olac:olac": "dc:contributor" }, "conditions": { "olac:code": "sponsor", "$match": "DK-CLARIN" }, "selector": "$t", "set_value": "cst.ku.dk" }]
 ``
