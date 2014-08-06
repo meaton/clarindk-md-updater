@@ -25,7 +25,7 @@ Run ``$ clarindk-md-updater help`` for usage details.
 
 **config** [set|get|clear] *{field} {value}*
 
-Using [flatiron-cli-config plugin] (https://github.com/flatiron/cli-config), enabled setting of config values in config.json. It is required to set escidoc_handle (auth), mongoose_auth (auth), targetUrl, and updaterHost/updaterPort (escidoc-metadata-updater service). Fullname and email are optional configuration settings.
+Using [flatiron-cli-config plugin] (https://github.com/flatiron/cli-config), it enables the viewing, setting, clearing of config values in config.json. It is required to set escidoc_handle (auth), mongoose_auth (auth), targetUrl, and updaterHost/updaterPort (escidoc-metadata-updater service). Fullname and email are optional configuration settings.
 
 **fetch** *{md-record-type} {CQL querystring}*
 
