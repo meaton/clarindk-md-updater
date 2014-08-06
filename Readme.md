@@ -1,26 +1,20 @@
 ## CLARIN-DK MD-Updater
 
-A Node.js Flatiron-CLI application to retrieve and update eSciDoc Metadata records (MD-Records) in the CLARIN-DK eSciDoc repository. 
+A Node.js Flatiron-CLI application to retrieve and update [eSciDoc](http://www.escidoc.org) Metadata records (MD-Records) in [clarin.dk](http://www.clarin.dk). 
 
 ####Requirements
-* Node.js >= 0.6 (http://nodejs.org/)
-* NPM (http://npmjs.org/) included with Node.js
-* eSciDoc Metadata-Updater (https://github.com/escidoc/escidoc-metadata-updater)
-* eSciDoc >= 1.3.x (http://www.escidoc.org)
-* MongoDB (http://www.mongodb.org/)
+* [Node.js](http://nodejs.org/) & [NPM](http://npmjs.org/) 
+* [eSciDoc Metadata-Updater](https://github.com/escidoc/escidoc-metadata-updater)
+* [MongoDB](http://www.mongodb.org/)
+* [eSciDoc](http://www.escidoc.org) (>=1.3.x)
 
 ####Installation
 See https://github.com/joyent/node/wiki/Installation for installation of Node.js.
-*Note NPM is packaged with latest Node.js installation.
 
-####NPM packages install:
-``npm install clarindk-md-updater`` or 
-``npm install {tarball-address}``
-
-See package.json for listed Node package dependencies.
+``npm install clarindk-md-updater``
 
 ####MongoDB installation
-http://docs.mongodb.org/manual/installation/
+[Installation](http://docs.mongodb.org/manual/installation/)
 
 ####Usage
 Run ``clarindk-md-updater help`` for usage details.
