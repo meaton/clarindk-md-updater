@@ -84,7 +84,7 @@ Set CLI configuration appropriately, updaterHost and updaterPort parameters for 
   "directories": {},
   "escidoc_handle": "ESCIDOC-XXXXXXX",
   "mongoose_auth": "mongodb://localhost/metadata_test",
-  "targetUrl": "http://repositor-host.domain",
+  "targetUrl": "http://repository-host.domain",
   “updaterHost”: “updater-host.domain”,
   “updaterPort”: “80”,
   "fullname": "Mitchell Seaton",
