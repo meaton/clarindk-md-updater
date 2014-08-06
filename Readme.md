@@ -78,14 +78,14 @@ Set CLI configuration appropriately, updaterHost and updaterPort parameters for 
 
 ###Appendix A: Default CLI Configuration
 
-#####Sample config file data/config.JSON:
+#####Example config file data/config.JSON:
 >``
 {
   "directories": {},
   "escidoc_handle": "ESCIDOC-XXXXXXX",
   "mongoose_auth": "mongodb://localhost/metadata_test",
-  "targetUrl": "http://core.clarin.dk",
-  “updaterHost”: “devtools.clarin.dk”,
+  "targetUrl": "http://repositor-host.domain",
+  “updaterHost”: “updater-host.domain”,
   “updaterPort”: “80”,
   "fullname": "Mitchell Seaton",
   "email": "seaton@hum.ku.dk"
