@@ -17,7 +17,7 @@ See https://github.com/joyent/node/wiki/Installation for installation of Node.js
 ``npm install clarindk-md-updater`` or 
 ``npm install {tarball-address}``
 
-See package.json for listed Node package dependencies
+See package.json for listed Node package dependencies.
 
 ####MongoDB installation
 http://docs.mongodb.org/manual/installation/
@@ -28,17 +28,18 @@ Run ``clarindk-md-updater help`` for usage details.
 - - -
 
 ###Commands
+
 **config** [set|get|clear] *{field} {value}*
 
-Part of flatiron-cli-config plugin for flatiron, enabled setting of config values in config.json. It is required to see escidoc_handle (auth), mongoose_auth (auth), targetUrl, and updaterHost/updaterPort (escidoc-md-updater service). Fullname and email are optional configuration values (currently unused).
+Part of [flatiron-cli-config plugin] (https://github.com/flatiron/cli-config), enabled setting of config values in config.json. It is required to set escidoc_handle (auth), mongoose_auth (auth), targetUrl, and updaterHost/updaterPort (escidoc-metadata-updater service). Fullname and email are optional configuration settings.
 
 **fetch** *{md-record-type} {CQL querystring}*
 
-Fetches a set of MD-records based on search CQL query. Alternatively, you can fetch MD-records for individual itemIDs using --no-cql param. Records are stored locally by session for review and modification. The CQL querystring can be obtained by a CQL page on clarin.dk and copy-to-clipboard button.
+Fetches a set of metadata records based on a search CQL query. Alternatively, you can fetch metadata records for individual repository items using the *--no-cql* param, by ID reference. Records are stored locally in the MongoDB database by session for review and offline modification.
 
 **show**
 
-Shows a table of all Query’s for a user’s session (by current escidoc_handle key in config).
+Shows a table of all Query’s for a user’s Session (by current *escidoc_handle* key in config).
 
 **inspect** *{query}*
 
@@ -46,24 +47,25 @@ Inspects a valid Query. Shows a table of downloaded Items for the Query, and the
 
 **update** *{query} {change-file}*
 
-Updates the set of MD-records for the selected query from a users session, applying a change locally with defined change-rules (JSON format). These changes can be reviewed with inspect (--show-data) before submission. All records that are successfully modified are flagged so. 
+Updates the set of metadata records for the selected query from a users session, applying a modificatin to the offline records with defined change-rules (JSON format). These changes can be reviewed with using the *inspect* command (with *--show-data* parameter) before upload and submission. All records that are successfully modified from their original are flagged. 
 
 **submit** *{query} {comment}*
 
-Locally modified results from a selected query are uploaded to eSciDoc via the eSciDoc MD-updater service, submitted and released in a completed operation. 
+Modified results from a selected query are uploaded to eSciDoc via the eSciDoc metadata-updater service, submitted and released in a completed operation. 
 Once submission is completed the query is marked as closed. Comment is required.
 
 **addUser** *{escidoc_handle}*
 
-Adds a new and valid User to the current Session. fullname and email values are prompted for, if left blank the config values are used. New values for escidoc_handle, fullname and email are automatically set in the config.
+Adds a new and valid User to the current Session. fullname and email values are prompted for, if left blank the current config values are used and not overwritten. New values for escidoc_handle, fullname and email are automatically set in the config.
 
 **remove** *{query}*
 
-Removes existing query record and associated metadata records from the session.
+Removes existing Query record and associated metadata records from the session.
 
 - - -
 
 ###Deploying eSciDoc Metadata-Updater
+
 An RESTful updater service to eSciDoc. Additionally provides the service of retrieving metadata records for an item, in XML-format output. The XML can be edited and an updated document can be uploaded to eSciDoc via the service. Handles the authentication process with either eSciDoc handle cookie or Basic auth login method. 
    
 See https://github.com/escidoc/escidoc-metadata-updater for further details.
@@ -91,7 +93,6 @@ Set CLI configuration appropriately, updaterHost and updaterPort parameters for 
 ``
 
 ###Appendix B: Change-Rules Configuration
-
 
 #####Example Change-rules JSON (override rule):
 Replace the entire value selected with a new value.
@@ -132,5 +133,16 @@ Add a new Metadata element to the record, including defined attributes and text 
 Match and replace a string from the selected value and replace the first match found with the new value. Regular Expressions may be used also, and for global replacement.
 
 >``
-[{ "change_type": "replace", "field_position": { "olac:olac": "dc:contributor" }, "conditions": { "olac:code": "sponsor", "$match": "DK-CLARIN" }, "selector": "$t", "set_value": "cst.ku.dk" }]
+[{ 
+  "change_type":"addition",
+  "field_position":{
+     "olac:olac":"dc:contributor"
+  },
+  "conditions": {
+     "olac:code": "sponsor", 
+     "$match": "DK-CLARIN" 
+  }, 
+  "selector": "$t", 
+  "set_value": "cst.ku.dk"
+}]
 ``
