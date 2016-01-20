@@ -10,7 +10,6 @@ var mg = require('mongoose');
 var jsonpath = require('jsonpath-plus');
 var _ = require('underscore');
 
-
 var session = null;
 var config = require('../data/config.json');
 var handle = config['escidoc_handle'];
@@ -24,7 +23,7 @@ var SessionModel = schema.models.Session;
 
 var openSession = function(session, callback) {
   session = session;
-  callback(queryId);
+  callback(queryTarget);
 };
 
 var getSession = function(sessionModel, callback) {
@@ -82,4 +81,4 @@ var parseRecord = function(record, callback) {
 };
 
 // Use existing user session (escidoc_handle)
-getSession(schema.models.Session, function(res, err) { if(!err) openSession(res, queryTarget); else throw err; });
+getSession(schema.models.Session, function(res, err) { if(!err) openSession(res, findQuery); else throw err; });
