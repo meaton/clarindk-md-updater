@@ -3,6 +3,7 @@
   "escidoc_handle": "ESCIDOC-YLuFIjdd2T1370600399272",
   "mongoose_auth": "mongodb://localhost/metadata_test",
   "targetUrl": "http://devtools.clarin.dk",
+  "targetQuery": "",
   "updaterHost": "localhost",
   "updaterPort": "8082",
   "fullname": "Mitchell Seaton",

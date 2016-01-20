@@ -2,24 +2,40 @@
   "name": "clarindk-md-updater",
   "version": "0.1.2",
   "description": "A CLI for Metadata Record updates to CLARIN-DK via eSciDoc MD-Updater RESTful service.",
-  "keywords": ["cli","metadata","updater","escidoc","repository","xml","harvest","oai","olac"],
+  "keywords": [
+    "cli",
+    "metadata",
+    "updater",
+    "escidoc",
+    "repository",
+    "xml",
+    "harvest",
+    "oai",
+    "olac"
+  ],
   "author": "Mitchell Seaton <seaton@hum.ku.dk>",
   "homepage": "https://github.com/meaton/clarindk-md-updater",
-  "maintainers": [{"name": "seaton","email": "seaton@hum.ku.dk","url": "http://cst.ku.dk"}],
-  "contributors": [ 
+  "maintainers": [
+    {
+      "name": "seaton",
+      "email": "seaton@hum.ku.dk",
+      "url": "http://cst.ku.dk"
+    }
+  ],
+  "contributors": [
     {
       "name": "Mitchell Seaton",
       "email": "seaton@hum.ku.dk"
-    } 
+    }
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/meaton/clarindk-md-updater.git"
   },
-  "directories":{
-     "lib":"./lib",
-     "test":"./test",
-     "bin":"./bin"
+  "directories": {
+    "lib": "./lib",
+    "test": "./test",
+    "bin": "./bin"
   },
   "bin": {
     "clarindk-md-updater": "./bin/updater"
@@ -32,29 +48,33 @@
   "engines": {
     "node": ">= 0.6||>=0.8"
   },
-  "dependencies" : {
-    "underscore" : "1.4.x",
-    "mongoose" :  "3.5.x",
-    "xml2json" :  "0.3.x",
-    "jsontoxml" : "0.0.x",
-    "xmldom"   :  "0.1.x",
-    "flatiron" :  "0.3.x",
-    "flatiron-cli-config" : "0.1.x",
-    "cli-table" : "0.2.x",
-    "colors"   :  "0.6.x",
-    "prettyjson" : "0.8.x",
-    "prompt" : "0.2.x",
-    "pkginfo"  :  "0.3"
+  "dependencies": {
+    "underscore": "1.4.x",
+    "mongoose": "3.5.x",
+    "xml2json": "0.3.x",
+    "jsontoxml": "0.0.x",
+    "xmldom": "0.1.x",
+    "flatiron": "0.3.x",
+    "flatiron-cli-config": "0.1.x",
+    "cli-table": "0.2.x",
+    "colors": "0.6.x",
+    "prettyjson": "0.8.x",
+    "prompt": "0.2.x",
+    "pkginfo": "0.3"
   },
   "devDependencies": {
     "coffee-script": "*",
-    "mocha": "*",
-    "markdown": "*",
-    "stylus": "*",
-    "should": "*",
+    "jsonpath-plus": "^0.14.0",
     "less": "*",
+    "markdown": "*",
+    "mocha": "*",
+    "should": "*",
+    "stylus": "*",
     "uglify-js": "*"
-   },
-  "bugs": {"email": "seaton@hum.ku.dk","url": "http://github.com/meaton/clarindk-md-updater/issues"},
+  },
+  "bugs": {
+    "email": "seaton@hum.ku.dk",
+    "url": "http://github.com/meaton/clarindk-md-updater/issues"
+  },
   "license": "MIT"
 }
