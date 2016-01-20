@@ -37,7 +37,8 @@ var getSession = function(sessionModel, callback) {
 };
 
 var findQuery = function(queryId) {
-  if(!mg.Types.ObjectId.isValid(queryId))
+  var checkHexRep = /^[0-9a-fA-F]{24}$/;
+  if(!checkHexRep.test(queryId))
     throw new Error("Query Id is invalid.");
 
   Query.findById(queryId)
