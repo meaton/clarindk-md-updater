@@ -13,7 +13,6 @@ var _ = require('underscore');
 var session = null;
 var config = require('../data/config.json');
 var handle = config['escidoc_handle'];
-var queryTarget = config.targetQuery;
 
 var db = mg.connect(config['mongoose_auth']);
 
@@ -21,9 +20,9 @@ var schema = require('../lib/schema.js');
 var QueryModel = schema.models.Query;
 var SessionModel = schema.models.Session;
 
-var openSession = function(session, callback) {
-  session = session;
-  process.nextTick(callback);
+var openSession = function(sessionObj, callback) {
+  session = sessionObj;
+  callback();
 };
 
 var getSession = function(sessionModel, callback) {
@@ -37,8 +36,9 @@ var getSession = function(sessionModel, callback) {
 };
 
 var findQuery = function() {
-  var queryId = queryTarget;
+  var queryId = config.targetQuery;
   var checkHexRep = /^[0-9a-fA-F]{24}$/;
+
   if(!checkHexRep.test(queryId))
     throw new Error("Query Id is invalid.");
 
