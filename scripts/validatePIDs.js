@@ -69,9 +69,11 @@ var parseQuery = function(queryResult, callback) {
   var first = false;
   _.each(queryResult.result_collection, function(record) {
       var resourceProxyPath = "$.CMD.Resources..ResourceProxy";
-      if(first) console.log('record: ' + JSON.parse(record.data));
+      if(first) console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
       parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
-          console.log('result:: ', val.id, val.ResourceRef['$t']);
+          _.each(val, function(ref) {
+            console.log('result:: ', ref.id, ref['ResourceRef']['$t']);
+          });
       });
       first = true;
   });
