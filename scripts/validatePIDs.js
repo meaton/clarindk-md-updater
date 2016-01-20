@@ -10,13 +10,13 @@ var mg = require('mongoose');
 var jsonpath = require('jsonpath-plus');
 var _ = require('underscore');
 
-var config = require('../data/config.json');
 
-var handle = config.get('escidoc_handle');
-var queryTarget = config.get('targetQuery');
 var session = null;
+var config = require('../data/config.json');
+var handle = config['escidoc_handle']);
+var queryTarget = config.targetQuery;
 
-var db = mg.connect(config.get('mongoose_auth'));
+var db = mg.connect(config['mongoose_auth']);
 
 var schema = require('../lib/schema.js');
 var QueryModel = schema.models.Query;
