@@ -23,20 +23,21 @@ var SessionModel = schema.models.Session;
 
 var openSession = function(session, callback) {
   session = session;
-  callback(queryTarget);
+  process.nextTick(callback);
 };
 
 var getSession = function(sessionModel, callback) {
   sessionModel.findByHandle(handle, function(err, res) {
     if(!err)
-          if(res != null) callback(res);
+        if(res != null) callback(res);
         else callback(res, new Error("No valid Session exists for set handle: " + handle));
     else
         throw new Error("Error opening Session: " + err);
   });
 };
 
-var findQuery = function(queryId) {
+var findQuery = function() {
+  var queryId = queryTarget;
   var checkHexRep = /^[0-9a-fA-F]{24}$/;
   if(!checkHexRep.test(queryId))
     throw new Error("Query Id is invalid.");
