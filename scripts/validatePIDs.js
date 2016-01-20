@@ -13,7 +13,7 @@ var _ = require('underscore');
 
 var session = null;
 var config = require('../data/config.json');
-var handle = config['escidoc_handle']);
+var handle = config['escidoc_handle'];
 var queryTarget = config.targetQuery;
 
 var db = mg.connect(config['mongoose_auth']);
