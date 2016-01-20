@@ -41,7 +41,7 @@ var findQuery = function(queryId) {
   if(!checkHexRep.test(queryId))
     throw new Error("Query Id is invalid.");
 
-  Query.findById(queryId)
+  QueryModel.findById(queryId)
     .populate("result_collection")
     .populate({
       path: '_session',
@@ -82,4 +82,4 @@ var parseRecord = function(record, callback) {
 };
 
 // Use existing user session (escidoc_handle)
-getSession(schema.models.Session, function(res, err) { if(!err) openSession(res, findQuery); else throw err; });
+getSession(SessionModel, function(res, err) { if(!err) openSession(res, findQuery); else throw err; });
