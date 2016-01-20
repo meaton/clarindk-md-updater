@@ -74,7 +74,7 @@ var parseQuery = function(queryResult, callback) {
 };
 
 // parse records, iterate over resource proxies (pid refs)
-var parseRecord = function(record, callback) {
+var parseRecord = function(record, path, callback) {
   JSONPath({
     json: record,
     path: path,
