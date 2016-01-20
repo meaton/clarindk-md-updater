@@ -66,12 +66,14 @@ var findQuery = function() {
 
 var parseQuery = function(queryResult, callback) {
   console.log('result length: ' + queryResult.result_collection.length);
+  var first = false;
   _.each(queryResult.result_collection, function(record) {
-      var resourceProxyPath = "/CMD/Resources/ResourceProxyList/ResourceProxy"
-      console.log('record: ' + record.data.length);
+      var resourceProxyPath = "$.CMD.Resources..ResourceProxy";
+      if(first) console.log('record: ' + JSON.parse(record.data));
       parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
           console.log('result:: ', val.id, val.ResourceRef['$t']);
       });
+      first = true;
   });
 };
 
