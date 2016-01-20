@@ -11,7 +11,6 @@ var jsonpath = require('jsonpath-plus');
 var _ = require('underscore');
 
 var config = require('../data/config.json');
-var utils = require('../lib/utils.js');
 
 var handle = config.get('escidoc_handle');
 var queryTarget = config.get('targetQuery');
@@ -26,6 +25,16 @@ var SessionModel = schema.models.Session;
 var openSession = function(session, callback) {
   session = session;
   callback(queryId);
+};
+
+var getSession = function(sessionModel, callback) {
+  sessionModel.findByHandle(handle, function(err, res) {
+    if(!err)
+          if(res != null) callback(res);
+        else callback(res, new Error("No valid Session exists for set handle: " + handle));
+    else
+        throw new Error("Error opening Session: " + err);
+  });
 };
 
 var findQuery = function(queryId) {
@@ -73,4 +82,4 @@ var parseRecord = function(record, callback) {
 };
 
 // Use existing user session (escidoc_handle)
-utils.getSession(schema.models.Session, function(res, err) { if(!err) openSession(res, queryTarget); else throw err; });
+getSession(schema.models.Session, function(res, err) { if(!err) openSession(res, queryTarget); else throw err; });
