@@ -69,7 +69,7 @@ var parseQuery = function(queryResult, callback) {
   _.each(queryResult.result_collection, function(record) {
       var resourceProxyPath = "/CMD/Resources/ResourceProxyList/ResourceProxy"
       console.log('record: ' + record.data.length);
-      parseRecord(record.data, resourceProxyPath, function(val) {
+      parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
           console.log('result:: ', val.id, val.ResourceRef['$t']);
       });
   });
