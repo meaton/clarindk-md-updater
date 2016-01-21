@@ -62,9 +62,10 @@ var findQuery = function() {
             // delete existing? use request-promise
             rp({
               method: 'GET', //DELETE
-              uri: pidManagerUri + invalidPID
-            }).then(function(delBody) {
-              console.log('promise test success');
+              uri: pidManagerUri + invalidPID,
+              resolveWithFullResponse: true
+            }).then(function(resp) {
+              console.log('promise test success: ' + resp.statusCode);
               console.log('create updated PID record: ' + idRef);
               // create <param /> post body
               var post = '<param>';
