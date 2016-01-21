@@ -139,7 +139,7 @@ var parseQuery = function(queryResult, callback) {
                       if(!refMatch && ref.id.indexOf('_') == 0 && md5checksum.length > 0) {
                         console.log('content PID: ' + ref['ResourceRef']['$t']);
                         console.log('ref ID: ' + ref.id);
-                        callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix, ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", md5checksum[0]);
+                        callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", md5checksum[0]);
                       }
                   });
                 }
