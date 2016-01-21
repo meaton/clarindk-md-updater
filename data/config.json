@@ -10,5 +10,9 @@
   "email": "seaton@hum.ku.dk",
   "colors": true,
   "useBatch": false,
-  "batchLimit": "10"
+  "batchLimit": "10",
+  "pidmanager_host": "devtools.clarin.dk",
+	"pidmanager_path": "/pidmanager/pid/handle/",
+	"pidmanager_auth_user": "clarindk",
+	"pidmanager_auth_pass": "password",
 }

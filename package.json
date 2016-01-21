@@ -49,18 +49,19 @@
     "node": ">= 0.6||>=0.8"
   },
   "dependencies": {
-    "underscore": "1.4.x",
-    "mongoose": "3.5.x",
-    "xml2json": "0.3.x",
-    "jsontoxml": "0.0.x",
-    "xmldom": "0.1.x",
-    "flatiron": "0.3.x",
-    "flatiron-cli-config": "0.1.x",
     "cli-table": "0.2.x",
     "colors": "0.6.x",
+    "flatiron": "0.3.x",
+    "flatiron-cli-config": "0.1.x",
+    "jsontoxml": "0.0.x",
+    "mongoose": "3.5.x",
+    "pkginfo": "0.3",
     "prettyjson": "0.8.x",
     "prompt": "0.2.x",
-    "pkginfo": "0.3"
+    "request": "^2.67.0",
+    "underscore": "1.4.x",
+    "xml2json": "0.3.x",
+    "xmldom": "0.1.x"
   },
   "devDependencies": {
     "coffee-script": "*",

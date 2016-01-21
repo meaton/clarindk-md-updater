@@ -5,9 +5,9 @@
 * @author seaton
 *
 */
-
 var mg = require('mongoose');
 var jsonpath = require('jsonpath-plus');
+var request = require('request');
 var _ = require('underscore');
 
 var session = null;
@@ -72,6 +72,16 @@ var parseQuery = function(queryResult, callback) {
       parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
           _.each(val, function(ref) {
             console.log('result:: ', ref.id, ref['ResourceRef']['$t']);
+            var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'https://' + config.pidmanager_host + config.pidmanager_path);
+            request.get(pidUrl + '/url'), {
+              'auth': {
+                'user': config.pidmanager_auth_user,
+                'password': config.pidmanager_auth_pass
+              }
+            }, function(err, resp, body) {
+              console.log('status:', resp.statusCode);
+              console.log('url prop:', body);
+            });
           });
       });
   });
