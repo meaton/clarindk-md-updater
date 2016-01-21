@@ -10,6 +10,8 @@ var jsonpath = require('jsonpath-plus');
 var request = require('request');
 var _ = require('underscore');
 
+var DOMParser = require('xmldom').DOMParser, XMLSerializer = require('xmldom').XMLSerializer;
+
 var session = null;
 var config = require('../data/config.json');
 var handle = config['escidoc_handle'];
@@ -82,7 +84,14 @@ var parseQuery = function(queryResult, callback) {
                 }
               }, function(err, resp, body) {
                 console.log('status:', resp.statusCode);
-                console.log('url prop:', body);
+                if(err) console.error('err: ' + err);
+                else {
+                  //console.log('url prop:', body);
+                  var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
+                  _.each(pidUrlBody.documentElement.getElementsByTagName('data'), function(val) {
+                    if(val.textContent.indexOf('http')) console.log('found Url: ', val.textContent);
+                  });
+                }
               }
             );
           });
