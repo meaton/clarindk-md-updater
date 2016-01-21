@@ -85,6 +85,7 @@ var parseQuery = function(queryResult, callback) {
                 console.log('url prop:', body);
               }
             );
+          });
       });
   });
 };
