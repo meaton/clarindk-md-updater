@@ -5,6 +5,7 @@
 * @author seaton
 *
 */
+var url = require('url');
 var mg = require('mongoose');
 var jsonpath = require('jsonpath-plus');
 var request = require('request');
@@ -74,7 +75,6 @@ var parseQuery = function(queryResult, callback) {
       parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
           _.each(val, function(ref) {
             console.log('result:: ', ref.id, ref['ResourceRef']['$t']);
-
             var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
             request.get(pidUrl + '/url',
               {
@@ -89,7 +89,11 @@ var parseQuery = function(queryResult, callback) {
                   //console.log('url prop:', body);
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
                   _.each(pidUrlBody.documentElement.getElementsByTagName('data'), function(val) {
-                    if(val.textContent.indexOf('http') > -1) console.log('found Url: ', val.textContent);
+                    if(val.textContent.indexOf('http') > -1) {
+                      console.log('found Url: ', val.textContent);
+                      var valUrl = url.parse(val.textContent);
+                      console.log('refMatch:', valUrl.pathname.substr(valUrl.lastIndexOf('/') == ref.id);
+                    }
                   });
                 }
               }
