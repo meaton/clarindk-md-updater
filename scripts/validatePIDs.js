@@ -74,7 +74,6 @@ var parseQuery = function(queryResult, callback) {
       //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
       parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
           _.each(val, function(ref) {
-            console.log('result:: ', ref.id, ref['ResourceRef']['$t']);
             var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
             request.get(pidUrl + '/url',
               {
@@ -90,7 +89,8 @@ var parseQuery = function(queryResult, callback) {
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
                   _.each(pidUrlBody.documentElement.getElementsByTagName('data'), function(val) {
                     if(val.textContent.indexOf('http') > -1) {
-                      console.log('found Url: ', val.textContent);
+                      console.log('result: ', ref.id, ref['ResourceRef']['$t']);
+                      console.log('url: ', val.textContent);
                       var valUrl = url.parse(val.textContent);
                       console.log('refMatch:', (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == ref.id.substr(ref.id.indexOf('_') + 1)) );
                     }
