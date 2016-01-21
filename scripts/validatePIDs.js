@@ -113,7 +113,7 @@ var parseQuery = function(queryResult, callback) {
                       console.log('refMatch:', refMatch);
 
                       if(!refMatch && ref.id.indexOf('_') == 0 && md5checksum.length > 0)
-                        callback("dkclarin:" + refID, val.substr(0, val.lastIndexOf('/')) + refID, "content", md5checksum[0]);
+                        callback("dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", md5checksum[0]);
                   });
                 }
               }
