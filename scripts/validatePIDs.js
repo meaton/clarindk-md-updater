@@ -61,7 +61,7 @@ var findQuery = function() {
             console.log('deleting pid: ' + invalidPID);
             // delete existing? use request-promise
             rp({
-              method: 'GET', //DELETE
+              method: 'GET', //'DELETE'
               uri: pidManagerUri + invalidPID,
               resolveWithFullResponse: true
             }).then(function(resp) {
@@ -75,7 +75,8 @@ var findQuery = function() {
                   post += '<checksum>' + checksum + '</checksum>';
               post += '</param>';
               console.log('do post update: ' + post);
-              /*request({
+
+              request({
                 method: 'POST',
                 uri: pidManagerUri,
                 body: post
@@ -84,7 +85,7 @@ var findQuery = function() {
                   console.log('body');
                 else
                   console.error('err: ', err);
-              });*/
+              });
             }).catch(function(err) {
               console.error('err: ' + err);
             });
