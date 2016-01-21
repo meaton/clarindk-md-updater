@@ -92,7 +92,7 @@ var parseQuery = function(queryResult, callback) {
                     if(val.textContent.indexOf('http') > -1) {
                       console.log('found Url: ', val.textContent);
                       var valUrl = url.parse(val.textContent);
-                      console.log('refMatch:', valUrl.pathname.substr(valUrl.lastIndexOf('/') == ref.id);
+                      console.log('refMatch:', valUrl.pathname.substr(valUrl.lastIndexOf('/') == ref.id));
                     }
                   });
                 }
