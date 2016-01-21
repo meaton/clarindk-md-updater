@@ -15,15 +15,19 @@
   ],
   "author": "Mitchell Seaton <seaton@hum.ku.dk>",
   "homepage": "https://github.com/meaton/clarindk-md-updater",
-  "maintainers": [{
-    "name": "seaton",
-    "email": "seaton@hum.ku.dk",
-    "url": "http://cst.ku.dk"
-  }],
-  "contributors": [{
-    "name": "Mitchell Seaton",
-    "email": "seaton@hum.ku.dk"
-  }],
+  "maintainers": [
+    {
+      "name": "seaton",
+      "email": "seaton@hum.ku.dk",
+      "url": "http://cst.ku.dk"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Mitchell Seaton",
+      "email": "seaton@hum.ku.dk"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/meaton/clarindk-md-updater.git"
@@ -55,6 +59,7 @@
     "prettyjson": "0.8.x",
     "prompt": "0.2.x",
     "request": "^2.67.0",
+    "request-promise": "^2.0.0",
     "underscore": "1.4.x",
     "xml2json": "0.3.x",
     "xmldom": "0.1.x"

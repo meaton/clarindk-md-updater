@@ -9,6 +9,7 @@ var url = require('url');
 var mg = require('mongoose');
 var jsonpath = require('jsonpath-plus');
 var request = require('request');
+var rp = require('request-promise');
 var _ = require('underscore');
 
 var DOMParser = require('xmldom').DOMParser, XMLSerializer = require('xmldom').XMLSerializer;
@@ -53,17 +54,39 @@ var findQuery = function() {
     })
     .exec(function(err, query) {
       if (query != null && query._session == session._id.toString()) { // Session match
-        parseQuery(query, function(idRef, refUrl, type, checksum) {
+        var pidManagerUri = 'http://' + pidmanager_auth_user + ':' + pidmanager_auth_pass + '@' + pidmanager_host + pidmanager_path;
+        parseQuery(query, function(invalidPID, idRef, refUrl, type, checksum) {
           // update content PID with content PID with corrected url ref
           if(type == "content") {
-            // create <param /> post body
-            var post = '<param>';
-            if (idRef != undefined) post += '<systemID>' + idRef + '</systemID>';
-            if (refUrl != undefined) post += '<url>' + refUrl + '</url>';
-            if (checksum != undefined)
-                post += '<checksum>' + checksum + '</checksum>';
-            post += '</param>';
-            console.log('post update: ' + post);
+            console.log('deleting pid: ' + invalidPID);
+            // delete existing? use request-promise
+            rp({
+              method: 'GET', //DELETE
+              uri: pidManagerUri + invalidPID
+            }).then(function(delBody) {
+              console.log('promise test success');
+              console.log('create updated PID record: ' + idRef);
+              // create <param /> post body
+              var post = '<param>';
+              if (idRef != undefined) post += '<systemID>' + idRef + '</systemID>';
+              if (refUrl != undefined) post += '<url>' + refUrl + '</url>';
+              if (checksum != undefined)
+                  post += '<checksum>' + checksum + '</checksum>';
+              post += '</param>';
+              console.log('do post update: ' + post);
+              /*request({
+                method: 'POST',
+                uri: pidManagerUri,
+                body: post
+              }, function(err, resp, body) {
+                if(!err && resp.statusCode == 200)
+                  console.log('body');
+                else
+                  console.error('err: ', err);
+              });*/
+            }).catch(function(err) {
+              console.error('err: ' + err);
+            });
           }
         });
       } else {
@@ -115,7 +138,7 @@ var parseQuery = function(queryResult, callback) {
                       if(!refMatch && ref.id.indexOf('_') == 0 && md5checksum.length > 0) {
                         console.log('content PID: ' + ref['ResourceRef']['$t']);
                         console.log('ref ID: ' + ref.id);
-                        callback("dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", md5checksum[0]);
+                        callback(ref['ResourceRef']['$t'].replace('hdl:', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", md5checksum[0]);
                       }
                   });
                 }
