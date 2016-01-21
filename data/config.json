@@ -12,7 +12,8 @@
   "useBatch": false,
   "batchLimit": "10",
   "pidmanager_host": "devtools.clarin.dk",
-	"pidmanager_path": "/pidmanager/pid/handle/",
-	"pidmanager_auth_user": "clarindk",
-	"pidmanager_auth_pass": "password",
+  "pidmanager_path": "/pidmanager/pid/handle/",
+  "pidmanager_auth_user": "clarindk",
+  "pidmanager_auth_pass": "password",
+  "pidmanager_prefix": "11221"
 }

@@ -73,7 +73,7 @@ var parseQuery = function(queryResult, callback) {
           _.each(val, function(ref) {
             console.log('result:: ', ref.id, ref['ResourceRef']['$t']);
 
-            var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'https://' + config.pidmanager_host + config.pidmanager_path);
+            var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
             request.get(pidUrl + '/url',
               {
                 'auth': {
