@@ -53,13 +53,18 @@ var findQuery = function() {
     })
     .exec(function(err, query) {
       if (query != null && query._session == session._id.toString()) { // Session match
-        parseQuery(query, function(invalidPID, idRef, type) {
-          // match id ref with content PID refs url (resolve)
-          // if true
-          // skip over
-          // otherwise
-          // update PID with content PID with corrected url ref
-          // PID-manager POST
+        parseQuery(query, function(idRef, refUrl, type, checksum) {
+          // update content PID with content PID with corrected url ref
+          if(type == "content") {
+            // create <param /> post body
+            var post = '<param>';
+            if (idRef != undefined) post += '<systemID>' + idRef + '</systemID>';
+            if (refUrl != undefined) post += '<url>' + refUrl + '</url>';
+            if (checksum != undefined)
+                post += '<checksum>' + checksum + '</checksum>';
+            post += '</param>';
+            console.log('post update: ' + post);
+          }
         });
       } else {
         throw new Error("No Query found for Session: " + session._id);
@@ -85,15 +90,31 @@ var parseQuery = function(queryResult, callback) {
                 console.log('status:', resp.statusCode);
                 if(err) console.error('err: ' + err);
                 else {
-                  //console.log('url prop:', body);
+                  //console.log('body resp:', body);
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
-                  _.each(pidUrlBody.documentElement.getElementsByTagName('data'), function(val) {
-                    if(val.textContent.indexOf('http') > -1) {
-                      console.log('result: ', ref.id, ref['ResourceRef']['$t']);
-                      console.log('url: ', val.textContent);
-                      var valUrl = url.parse(val.textContent);
-                      console.log('refMatch:', (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == ref.id.substr(ref.id.indexOf('_') + 1)) );
-                    }
+
+                  var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+                  .filter(function(val) {
+                    return (val.textContent.indexOf('http') > -1); // url value
+                  }).pluck('textContent').value();
+
+                  var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+                  .filter(function(val) {
+                    return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
+                  }).pluck('textContent').value();
+
+                  console.log('url prop:', pidRef);
+                  console.log('url checksum:', md5checksum);
+
+                  _.each(pidRef, function(val) {
+                      var valUrl = url.parse(val);
+                      var refID = ref.id.substr(ref.id.indexOf('_') + 1);
+
+                      var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
+                      console.log('refMatch:', refMatch);
+
+                      if(refMatch && ref.id.indexOf('_') == 0 && md5checksum.length > 0)
+                        callback("dkclarin:" + refID, valUrl.pathname.substr(0, valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + refID, "content", md5checksum[0]);
                   });
                 }
               }
