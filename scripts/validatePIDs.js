@@ -89,7 +89,7 @@ var parseQuery = function(queryResult, callback) {
                   //console.log('url prop:', body);
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
                   _.each(pidUrlBody.documentElement.getElementsByTagName('data'), function(val) {
-                    if(val.textContent.indexOf('http')) console.log('found Url: ', val.textContent);
+                    if(val.textContent.indexOf('http') > -1) console.log('found Url: ', val.textContent);
                   });
                 }
               }
