@@ -61,7 +61,7 @@ var findQuery = function() {
             console.log('deleting pid: ' + invalidPID);
             // delete existing? use request-promise
             rp({
-              method: 'DELETE',
+              method: 'GET', //'DELETE',
               uri: pidManagerUri + invalidPID,
               resolveWithFullResponse: true
             }).then(function(resp) {
@@ -78,7 +78,7 @@ var findQuery = function() {
 
               console.log('do post update: ' + post);
 
-              request({
+              /*request({
                 method: 'POST',
                 uri: pidManagerUri,
                 body: post
@@ -87,10 +87,10 @@ var findQuery = function() {
                   console.log('body (200): ', body);
                 else
                   console.error('err: ', resp.statusCode, ' pid: ', invalidPID);
-              });
+              });*/
 
             }).catch(function(err) {
-              console.error('err: ' + err, ' pid: ', invalidPID);
+              console.error('DEL err: ' + err, ' pid: ', invalidPID, ' id: ' + idRef);
             });
           }
         });
@@ -108,7 +108,9 @@ var parseQuery = function(queryResult, callback) {
       parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
           _.each(val, function(ref) {
             var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
-            request.get(pidUrl + '/url',
+            // TODO ref.id pass to request
+
+            request.get(pidUrl + '/url?ref=' + ref.id,
               {
                 'auth': {
                   'user': config.pidmanager_auth_user,
@@ -116,9 +118,9 @@ var parseQuery = function(queryResult, callback) {
                 }
               }, function(err, resp, body) {
                 console.log('status:', resp.statusCode);
-                if(err)
-                  console.error('error: ' + resp.statusCode, ' body: ' + body);
-                else {
+                console.log('rID: ' + url.parse(resp.url).query.ref);
+                var rID = url.parse(resp.url).query.ref;
+                if(!err && resp.statusCode == 200) {
                   //console.log('body resp:', body);
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
 
@@ -137,9 +139,10 @@ var parseQuery = function(queryResult, callback) {
 
                   _.each(pidRef, function(val) {
                       var valUrl = url.parse(val);
-                      var refID = ref.id.substr(ref.id.indexOf('_') + 1);
+                      var refID = rID.substr(rID.indexOf('_') + 1);
                       var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
-                      console.log('refMatch:', refMatch);
+
+                      console.log('refMatch:', refMatch, ' refID: ' + refID, ' url: ', valUrl.pathname);
 
                       if(!refMatch && ref.id.indexOf('_') == 0 && md5checksum.length > 0) {
                         console.log('content PID: ' + ref['ResourceRef']['$t']);
@@ -147,6 +150,8 @@ var parseQuery = function(queryResult, callback) {
                         callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", md5checksum[0]);
                       }
                   });
+                } else {
+                  console.error('error: ' + resp.statusCode, ' body: ' + body);
                 }
               }
             );
