@@ -54,7 +54,7 @@ var findQuery = function() {
     })
     .exec(function(err, query) {
       if (query != null && query._session == session._id.toString()) { // Session match
-        var pidManagerUri = 'http://' + config.pidmanager_auth_user + ':' + config.pidmanager_auth_pass + '@' + config.pidmanager_host + config.pidmanager_path;
+        var pidManagerUri = 'https://' + config.pidmanager_auth_user + ':' + config.pidmanager_auth_pass + '@' + config.pidmanager_host + config.pidmanager_path;
         parseQuery(query, function(invalidPID, idRef, refUrl, type, checksum) {
           // update content PID with content PID with corrected url ref
           if(type == "content") {
