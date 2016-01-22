@@ -61,12 +61,13 @@ var findQuery = function() {
             console.log('deleting pid: ' + invalidPID);
             // delete existing? use request-promise
             rp({
-              method: 'DELETE',
+              method: 'GET', // 'DELETE'
               uri: pidManagerUri + invalidPID,
               resolveWithFullResponse: true
             }).then(function(resp) {
               console.log('promise test success: ' + resp.statusCode);
               console.log('create updated PID record: ' + idRef);
+
               // create <param /> post body
               var post = '<param>';
               if (idRef != undefined) post += '<systemID>' + idRef + '</systemID>';
@@ -74,6 +75,7 @@ var findQuery = function() {
               if (checksum != undefined)
                   post += '<checksum>' + checksum + '</checksum>';
               post += '</param>';
+
               console.log('do post update: ' + post);
 
               /*request({
@@ -86,6 +88,7 @@ var findQuery = function() {
                 else
                   console.error('err: ', err, ' pid: ', invalidPID);
               });*/
+
             }).catch(function(err) {
               console.error('err: ' + err, ' pid: ', invalidPID);
             });
@@ -113,7 +116,8 @@ var parseQuery = function(queryResult, callback) {
                 }
               }, function(err, resp, body) {
                 console.log('status:', resp.statusCode);
-                if(err) console.error('err: ' + err);
+                if(err)
+                  console.error('error: ' + resp.statusCode, ' body: ' + body);
                 else {
                   //console.log('body resp:', body);
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
