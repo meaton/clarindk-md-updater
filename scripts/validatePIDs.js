@@ -119,7 +119,7 @@ var parseQuery = function(queryResult, callback) {
               }, function(err, resp, body) {
                 console.log('status:', resp.statusCode);
                 console.log('rID: ' + require('querystring').parse(resp.url, true).query.ref);
-                var rID = url.parse(resp.url).query.ref;
+                var rID = require('querystring').parse(resp.url, true).query.ref;
                 if(!err && resp.statusCode == 200) {
                   //console.log('body resp:', body);
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
