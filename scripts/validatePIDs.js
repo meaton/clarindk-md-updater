@@ -108,6 +108,7 @@ var parseQuery = function(queryResult, callback) {
       parseRecord(JSON.parse(record.data), resourceProxyPath, function(val) {
           _.each(val, function(ref) {
             var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
+
             // TODO ref.id pass to request
 
             request.get(pidUrl + '/url?ref=' + ref.id,
@@ -118,8 +119,6 @@ var parseQuery = function(queryResult, callback) {
                 }
               }, function(err, resp, body) {
                 console.log('status:', resp.statusCode);
-                console.log('rID: ' + require('querystring').parse(resp.url, true).query.ref);
-                var rID = require('querystring').parse(resp.url, true).query.ref;
                 if(!err && resp.statusCode == 200) {
                   //console.log('body resp:', body);
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
@@ -139,7 +138,7 @@ var parseQuery = function(queryResult, callback) {
 
                   _.each(pidRef, function(val) {
                       var valUrl = url.parse(val);
-                      var refID = rID.substr(rID.indexOf('_') + 1);
+                      var refID = ref.id.substr(ref.id.indexOf('_') + 1);
                       var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
 
                       console.log('refMatch:', refMatch, ' refID: ' + refID, ' url: ', valUrl.pathname);
