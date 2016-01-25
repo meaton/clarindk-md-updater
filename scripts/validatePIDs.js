@@ -6,6 +6,7 @@
 *
 */
 var url = require('url');
+var querystring = require('querystring');
 var mg = require('mongoose');
 var jsonpath = require('jsonpath-plus');
 var request = require('request');
