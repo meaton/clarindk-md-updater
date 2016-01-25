@@ -119,8 +119,12 @@ var parseQuery = function(queryResult, callback) {
                 }
               }, function(err, resp, body) {
                 console.log('status:', resp.statusCode);
+                var refID = require('querystring').parse(resp.request.uri).query.ref;
+                
                 if(!err && resp.statusCode == 200) {
-                  //console.log('body resp:', body);
+                  console.log('req url:', resp.request.uri);
+                  console.log('ref from querystring: ' + refID);
+
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
 
                   var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
@@ -138,19 +142,23 @@ var parseQuery = function(queryResult, callback) {
 
                   _.each(pidRef, function(val) {
                       var valUrl = url.parse(val);
-                      var refID = ref.id.substr(ref.id.indexOf('_') + 1);
+                      var isContentRef = (refID.indexOf('_') == 0);
+
+                      refID = refID.substr(refID.indexOf('_') + 1);
+
                       var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
 
                       console.log('refMatch:', refMatch, ' refID: ' + refID, ' url: ', valUrl.pathname);
 
-                      if(!refMatch && ref.id.indexOf('_') == 0 && md5checksum.length > 0) {
+                      if(!refMatch && isContentRef && md5checksum.length > 0) {
                         console.log('content PID: ' + ref['ResourceRef']['$t']);
                         console.log('ref ID: ' + ref.id);
+                        console.log('ref ID (querystring): ' + refID);
                         callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", md5checksum[0]);
                       }
                   });
                 } else {
-                  console.error('error: ' + resp.statusCode, ' body: ' + body);
+                  console.error('error: ' + resp.statusCode, 'refID: ', refID);
                 }
               }
             );
