@@ -157,7 +157,7 @@ var parseQuery = function(queryResult, callback) {
                       }
                   });
                 } else {
-                  console.error('error: ' + resp.statusCode, 'refID: ', refID);
+                  console.error('error: ' + resp.statusCode, 'refID: ', refID, 'record: ', record.dkclarinID);
                 }
               }
             );
