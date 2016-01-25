@@ -110,8 +110,10 @@ var parseQuery = function(queryResult, callback) {
             var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
 
             // TODO ref.id pass to request
-
-            request.get(pidUrl + '/url?ref=' + ref.id,
+            var hrTime = process.hrtime();
+            var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+            ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/',
+            request.get(pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,
               {
                 'auth': {
                   'user': config.pidmanager_auth_user,
@@ -119,10 +121,9 @@ var parseQuery = function(queryResult, callback) {
                 }
               }, function(err, resp, body) {
                 console.log('status:', resp.statusCode);
-                var refID = require('querystring').parse(resp.request.uri).query.ref;
-                
+                var refID = querystring.parse(resp.request.uri.query).ref;
                 if(!err && resp.statusCode == 200) {
-                  console.log('req url:', resp.request.uri);
+                  console.log('req url:', resp.request.uri.href);
                   console.log('ref from querystring: ' + refID);
 
                   var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
@@ -143,11 +144,9 @@ var parseQuery = function(queryResult, callback) {
                   _.each(pidRef, function(val) {
                       var valUrl = url.parse(val);
                       var isContentRef = (refID.indexOf('_') == 0);
-
                       refID = refID.substr(refID.indexOf('_') + 1);
 
                       var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
-
                       console.log('refMatch:', refMatch, ' refID: ' + refID, ' url: ', valUrl.pathname);
 
                       if(!refMatch && isContentRef && md5checksum.length > 0) {
