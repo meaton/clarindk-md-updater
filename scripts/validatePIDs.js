@@ -112,7 +112,6 @@ var parseQuery = function(queryResult, callback) {
             // TODO ref.id pass to request
             var hrTime = process.hrtime();
             var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
-            ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/',
             request.get(pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,
               {
                 'auth': {
