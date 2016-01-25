@@ -147,7 +147,7 @@ var parseQuery = function(queryResult, callback) {
                       refID = refID.substr(refID.indexOf('_') + 1);
 
                       var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
-                      console.log('refMatch:', refMatch, ' refID: ' + refID, ' url: ', valUrl.pathname);
+                      console.log('refMatch:', refMatch, 'Path: ' + resp.request.uri.pathname, ' refID: ' + refID, ' url: ', valUrl.pathname);
 
                       if(!refMatch && isContentRef && md5checksum.length > 0) {
                         console.log('content PID: ' + ref['ResourceRef']['$t']);
