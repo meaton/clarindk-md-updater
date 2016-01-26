@@ -159,41 +159,35 @@ var parseQuery = function(queryResult, callback) {
 
             // Handle JSON response from Handle API
             parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
-              console.log('pidRef', pidRef.length);
-              _.each(pidRef, function(val) {
-                var valUrl = url.parse(val);
-                var isContentRef = (refID.indexOf('_') == 0);
-                refID = refID.substr(refID.indexOf('_') + 1);
+              console.log('url prop:', pidRef);
 
-                console.log('url prop:', pidRef);
+              var valUrl = url.parse(pidRef);
+              var isContentRef = (refID.indexOf('_') == 0);
+              refID = refID.substr(refID.indexOf('_') + 1);
 
-                var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
-                console.log('refMatch:', refMatch, 'path: ' + resp.request.uri.pathname, ' ref ID: ' + refID, ' url: ', valUrl.pathname);
+              var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
+              console.log('refMatch:' + refMatch, ' path: ' + options.uri, ' ref ID: ' + refID, ' url: ' + valUrl.pathname);
 
-                if (!refMatch) {
-                  if (isContentRef) {
-                    console.log('content PID: ' + ref['ResourceRef']['$t']);
-                    console.log('ref ID: ' + ref.id);
-                    //console.log('ref ID (querystring): ' + refID);
+              if (!refMatch) {
+                if (isContentRef) {
+                  console.log('content PID: ' + ref['ResourceRef']['$t']);
+                  console.log('ref ID: ' + ref.id);
+                  //console.log('ref ID (querystring): ' + refID);
 
-                    parseRecord(body, '$.values[?(@.type === "MD5")].data.value', function(md5value) {
-                      console.log('md5value: ', md5value.length);
-                      _.each(md5value, function(checksum) {
-                        console.log('url checksum:', checksum);
-                        if (checksum != null && checksum.length > 0)
-                          callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", checksum);
-                        else
-                          console.error('err: Illegal or missing checksum value pid: ', refID);
-                      });
-                    });
+                  parseRecord(body, '$.values[?(@.type === "MD5")].data.value', function(checksum) {
+                    console.log('url checksum:', checksum);
+                    if (checksum != null && checksum.length > 0)
+                      callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", checksum);
+                    else
+                      console.error('err: Illegal or missing checksum value pid: ', refID);
+                  });
 
-                  } else {
-                    // landing page ref mismatch
-                    console.error('err: LP ref does not match id ', refID);
-                  }
+                } else {
+                  // landing page ref mismatch
+                  console.error('err: LP ref does not match id ', refID);
                 }
-                // TODO produce statistics
-              });
+              }
+              // TODO produce statistics
             });
 
           })
