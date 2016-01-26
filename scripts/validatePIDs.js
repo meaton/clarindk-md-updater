@@ -137,13 +137,14 @@ var parseQuery = function(queryResult, callback) {
 
         rp(options)
           .then(function(body) {
-            console.log('received body: ', body.toString().length);
+            console.log('received body: ', body.toString());
             //console.log('status:', resp.statusCode);
             //var refID = querystring.parse(resp.request.uri.query).ref;
             //console.log('req url:', resp.request.uri.href);
             //console.log('ref from querystring: ' + refID);
             var refID = ref.id;
             console.log('processing ', refID);
+
             /* // Handle XML response from REST PID Manager
             var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
             var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
@@ -157,7 +158,7 @@ var parseQuery = function(queryResult, callback) {
             */
 
             // Handle JSON response from Handle API
-            parseRecord(body, "$.values[@.type == $['URL']].data.value", function(pidRef) {
+            parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
               console.log('pidRef', pidRef.length);
               _.each(pidRef, function(val) {
                 var valUrl = url.parse(val);
@@ -175,7 +176,7 @@ var parseQuery = function(queryResult, callback) {
                     console.log('ref ID: ' + ref.id);
                     //console.log('ref ID (querystring): ' + refID);
 
-                    parseRecord(body, "$.values[@.type == $['MD5']].data.value", function(md5value) {
+                    parseRecord(body, '$.values[?(@.type === "MD5")].data.value', function(md5value) {
                       console.log('md5value: ', md5value.length);
                       _.each(md5value, function(checksum) {
                         console.log('url checksum:', checksum);
