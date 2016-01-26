@@ -120,7 +120,9 @@ var parseQuery = function(queryResult, callback) {
 
         var hrTime = process.hrtime();
         var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+
         var options = {
+          method: 'GET',
           uri: pidUrl,
           //url: pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,  // ref.id pass to request, timestamp milliseconds prevent cached request
           /*auth: {
@@ -135,6 +137,7 @@ var parseQuery = function(queryResult, callback) {
 
         rp(options)
           .then(function(body) {
+            console.log('received body: ', body.length);
             //console.log('status:', resp.statusCode);
             //var refID = querystring.parse(resp.request.uri.query).ref;
             //console.log('req url:', resp.request.uri.href);
