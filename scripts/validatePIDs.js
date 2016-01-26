@@ -137,7 +137,7 @@ var parseQuery = function(queryResult, callback) {
 
         rp(options)
           .then(function(body) {
-            console.log('received body: ', body.toString());
+            console.log('received body: ', JSON.stringify(body));
             //console.log('status:', resp.statusCode);
             //var refID = querystring.parse(resp.request.uri.query).ref;
             //console.log('req url:', resp.request.uri.href);
