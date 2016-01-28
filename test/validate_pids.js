@@ -204,44 +204,41 @@ var resolveUrlAndTest = function(ref) {
         };
 
         var req = rp(options)
-          .then(function(body) {
-            console.log('received body: ', JSON.stringify(body));
-
-            //console.log('status:', resp.statusCode);
-            //var refID = querystring.parse(resp.request.uri.query).ref;
-            //console.log('req url:', resp.request.uri.href);
-            //console.log('ref from querystring: ' + refID);
-
-            var refID = ref.id;
-            console.log('processing ', refID);
-
-            /* // Handle XML response from REST PID Manager
-            var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
-            var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-            .filter(function(val) {
-              return (val.textContent.indexOf('http') > -1); // url value
-            }).pluck('textContent').value();
-            var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-            .filter(function(val) {
-              return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
-            }).pluck('textContent').value();
-            */
-
-            // Handle JSON response from Handle API
-
-            handleAPIResponse(refID, body);
-
-          })
+          .then(function(body) { return handleAPIResponse(body, ref.id) })
           .catch(function(err) {
-            console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
+            console.error('err: Error occured resolving pid via HDL-API request: ', pidUrl, ' ref ID: ', refID, ' record: ', record.dkclarinID);
           });
-        return req;
+        req.should.be.fulfilled.and.notify(done);
       });
     });
   });
 };
 
-var handleAPIResponse = function(refID, body) {
+var handleAPIResponse = function(body, refID) {
+  console.log('received body: ', JSON.stringify(body));
+
+  //console.log('status:', resp.statusCode);
+  //var refID = querystring.parse(resp.request.uri.query).ref;
+  //console.log('req url:', resp.request.uri.href);
+  //console.log('ref from querystring: ' + refID);
+
+  var refID = ref.id;
+  console.log('processing ', refID);
+
+  /* // Handle XML response from REST PID Manager
+  var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
+  var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+  .filter(function(val) {
+    return (val.textContent.indexOf('http') > -1); // url value
+  }).pluck('textContent').value();
+  var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+  .filter(function(val) {
+    return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
+  }).pluck('textContent').value();
+  */
+
+  // Handle JSON response from Handle API
+
   describe('check against the PID data properties', function() {
     describe('#parseRecord', function() {
       it('should contain valid property values', function(done) {
