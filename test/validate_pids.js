@@ -230,10 +230,11 @@ var resolveUrlAndTest = function(ref) {
             // Handle JSON response from Handle API
 
             handleAPIResponse(refID, body);
+
+          })
+          .catch(function(err) {
+            console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
           });
-        //          .catch(function(err) {
-        //console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
-        //          });
         req.should.be.fulfilled.and.notify(done);
       });
     });
