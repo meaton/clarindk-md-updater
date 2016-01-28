@@ -11,7 +11,7 @@ var chaiAsPromised = require("chai-as-promised");
 var chai = require('chai');
 chai.use(chaiAsPromised);
 
-var  expect = chai.expect,
+var expect = chai.expect,
   should = chai.should();
 
 //var request = require('request');
@@ -173,70 +173,68 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
-    it('should have a valid PID value', function() {
+    it('should have a valid PID value', function(done) {
       expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
-    });
 
-    describe('resolve testing', function() {
+      //describe('resolve testing', function() {
+      //it('should resolve', function() {
+      // REST PID Manager url
+      /* var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
+        var hrTime = process.hrtime();
+        var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+      */
 
-      it('should resolve', function() {
-        // REST PID Manager url
-        /* var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
-          var hrTime = process.hrtime();
-          var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
-        */
+      // Handle.net API
+      var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'http://hdl.handle.net/api/handles/');
+      var options = {
+        method: 'GET',
+        uri: pidUrl,
+        //url: pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,  // ref.id pass to request, timestamp milliseconds prevent cached request
+        /*auth: {
+          'user': config.pidmanager_auth_user,
+          'password': config.pidmanager_auth_pass
+        },*/
+        headers: {
+          'Cache-Control': 'no-cache'
+        },
+        json: true
+      };
 
-        // Handle.net API
-        var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'http://hdl.handle.net/api/handles/');
-        var options = {
-          method: 'GET',
-          uri: pidUrl,
-          //url: pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,  // ref.id pass to request, timestamp milliseconds prevent cached request
-          /*auth: {
-            'user': config.pidmanager_auth_user,
-            'password': config.pidmanager_auth_pass
-          },*/
-          headers: {
-            'Cache-Control': 'no-cache'
-          },
-          json: true
-        };
+      var req = rp(options)
+        .then(function(body) {
+          console.log('received body: ', JSON.stringify(body));
 
-        var req = rp(options)
-          .then(function(body) {
-            console.log('received body: ', JSON.stringify(body));
+          //console.log('status:', resp.statusCode);
+          //var refID = querystring.parse(resp.request.uri.query).ref;
+          //console.log('req url:', resp.request.uri.href);
+          //console.log('ref from querystring: ' + refID);
 
-            //console.log('status:', resp.statusCode);
-            //var refID = querystring.parse(resp.request.uri.query).ref;
-            //console.log('req url:', resp.request.uri.href);
-            //console.log('ref from querystring: ' + refID);
+          var refID = ref.id;
 
-            var refID = ref.id;
+          console.log('processing ', refID);
 
-            console.log('processing ', refID);
+          /* // Handle XML response from REST PID Manager
+          var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
+          var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+          .filter(function(val) {
+            return (val.textContent.indexOf('http') > -1); // url value
+          }).pluck('textContent').value();
+          var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+          .filter(function(val) {
+            return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
+          }).pluck('textContent').value();
+          */
 
-            /* // Handle XML response from REST PID Manager
-            var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
-            var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-            .filter(function(val) {
-              return (val.textContent.indexOf('http') > -1); // url value
-            }).pluck('textContent').value();
-            var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-            .filter(function(val) {
-              return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
-            }).pluck('textContent').value();
-            */
+          // Handle JSON response from Handle API
 
-            // Handle JSON response from Handle API
+          handleAPIResponse(refID, body);
+        })
+        .catch(function(err) {
+          console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
+        });
 
-            handleAPIResponse(refID, body);
-          })
-          .catch(function(err) {
-            console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
-          });
-        return expect(req).to.eventually.have.property('responseCode', 1);
-      });
+      expect(req).to.be.fulfilled.and.notify(done);
     });
   });
 };
