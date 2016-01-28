@@ -159,13 +159,12 @@ var findInvalidPids = function(results) {
 
       //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
       it('should return more than 1 PID references', function(done) {
-        setTimeout(500, function() {
-          parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            expect(pidVal).to.have.length.above(1);
-            done();
+        parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
+          expect(pidVal).to.have.length.above(1);
 
-            _.each(pidVal, resolveUrlAndTest);
-          });
+          done();
+
+          _.each(pidVal, resolveUrlAndTest);
         });
       });
     });
@@ -174,7 +173,7 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
-    it('should have a valid PID value ' + ref.id, function(done) {
+    it('should have a valid PID value ' + ref.id, function() {
       expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
 
@@ -212,6 +211,7 @@ var resolveUrlAndTest = function(ref) {
           //console.log('ref from querystring: ' + refID);
 
           var refID = ref.id;
+
           console.log('processing ', refID);
 
           /* // Handle XML response from REST PID Manager
