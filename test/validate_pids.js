@@ -280,7 +280,7 @@ var resolveUrlAndTest = function(ref) {
         })
         .catch(function(err) {
           done(err);
-          console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
+          //console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
         });
     });
   });
