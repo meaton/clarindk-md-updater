@@ -53,11 +53,11 @@ var getSession = function(sessionModel, callback) {
 var findQuery = function() {
   var queryId = config.targetQuery;
 
-  describe('check query id' function() {
+  describe('check query id', function() {
     it('should match mongoDB id format', function() {
         var test = /^[0-9a-fA-F]{24}$/.test(queryId);
         //throw new Error("Query Id is invalid.");
-        expect(test).to.equal(true);
+        expect(test).to.be.true;
     });
   });
 
