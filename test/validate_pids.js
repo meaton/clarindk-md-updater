@@ -8,7 +8,7 @@
  */
 
 var chaiAsPromised = require("chai-as-promised");
-var chai = require('chai'),
+var chai = require('chai');
 chai.use(chaiAsPromised);
 
 var  expect = chai.expect,
