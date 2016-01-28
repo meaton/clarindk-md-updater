@@ -62,7 +62,7 @@ var findQuery = function() {
   });
 
   describe('retrieve query results', function() {
-    describe('#QueryModel.findById'), function() {
+    describe('#QueryModel.findById', function() {
       it('should retreive query results without error', function(done) {
         QueryModel.findById(queryId)
           .populate("result_collection")
