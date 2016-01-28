@@ -8,8 +8,8 @@
  */
 
 var chai = require('chai'),
-  expect = chai.expect;
-should = chai.should();
+  expect = chai.expect,
+  should = chai.should();
 
 //var request = require('request');
 var rp = require('request-promise');
