@@ -9,7 +9,7 @@
 
 var chai = require('chai'),
   expect = chai.expect;
-  should = chai.should();
+should = chai.should();
 
 //var request = require('request');
 var rp = require('request-promise');
@@ -55,9 +55,9 @@ var findQuery = function() {
 
   describe('check query id', function() {
     it('should match mongoDB id format', function() {
-        var test = /^[0-9a-fA-F]{24}$/.test(queryId);
-        //throw new Error("Query Id is invalid.");
-        expect(test).to.be.true;
+      var test = /^[0-9a-fA-F]{24}$/.test(queryId);
+      //throw new Error("Query Id is invalid.");
+      expect(test).to.be.true;
     });
   });
 
@@ -71,19 +71,19 @@ var findQuery = function() {
             select: '_id'
           })
           .exec(function(err, query) {
-            if(err) return done(err);
+            if (err) return done(err);
             query.should.be.an('object');
             expect(query._session).to.equal(session._id.toString());
 
             done();
 
-            if(query != null && query._session == session._id.toString()) // Session match
+            if (query != null && query._session == session._id.toString()) // Session match
               parseQuery(query); // update content PID with content PID with corrected url ref
             else
               throw new Error("No Query found for Session: " + session._id);
           });
-        });
       });
+    });
   });
 };
 
@@ -125,6 +125,7 @@ var updateRecord = function(invalidPID, idRef, refUrl, type, checksum) {
     }).catch(function(err) {
       console.error('DEL err: ' + err, ' pid: ', invalidPID, ' id: ' + idRef);
     });
+  }
 };
 
 var parseQuery = function(queryResult, callback) {
@@ -141,7 +142,7 @@ var parseQuery = function(queryResult, callback) {
 };
 
 var findInvalidPids = function(results) {
-  describe('find all records with invalid PIDs', function {
+  describe('find all records with invalid PIDs', function() {
     _.each(results, function(record) {
       var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
 
@@ -252,22 +253,22 @@ var resolveUrlAndTest = function(ref) {
                       expect(checksum).to.exist;
                       expect(/^[0-9a-f]{32}$/.test(checksum)).to.be.true;
 
-                      if(checksum != null && checksum.length > 0 && /^[0-9a-f]{32}$/.test(checksum))
-                        if(callback)
+                      if (checksum != null && checksum.length > 0 && /^[0-9a-f]{32}$/.test(checksum))
+                        if (callback)
                           callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", checksum);
-                      else
-                        console.error('err: Illegal or missing checksum value pid: ', refID);
+                        else
+                          console.error('err: Illegal or missing checksum value pid: ', refID);
 
                       done();
                     });
-                  } else if(!refMatch) {
-                      if(callback)
-                        callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "lp");
+                  } else if (!refMatch) {
+                    if (callback)
+                      callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "lp");
 
-                      // landing page ref mismatch
-                      console.error('err: LP ref does not match id ', refID);
+                    // landing page ref mismatch
+                    console.error('err: LP ref does not match id ', refID);
 
-                      done();
+                    done();
                   }
                 });
               });
