@@ -159,12 +159,13 @@ var findInvalidPids = function(results) {
 
       //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
       it('should return more than 1 PID references', function(done) {
-        parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-          expect(pidVal).to.have.length.above(1);
+        setTimeout(500, function() {
+          parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
+            expect(pidVal).to.have.length.above(1);
+            done();
 
-          done();
-
-          _.each(pidVal, resolveUrlAndTest);
+            _.each(pidVal, resolveUrlAndTest);
+          });
         });
       });
     });
@@ -211,8 +212,7 @@ var resolveUrlAndTest = function(ref) {
           //console.log('ref from querystring: ' + refID);
 
           var refID = ref.id;
-
-          //console.log('processing ', refID);
+          console.log('processing ', refID);
 
           /* // Handle XML response from REST PID Manager
           var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
@@ -234,7 +234,7 @@ var resolveUrlAndTest = function(ref) {
           console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
         });
 
-      expect(req).to.be.fulfilled.and.notify(done);
+      return req.should.be.fulfilled;
     });
   });
 };
