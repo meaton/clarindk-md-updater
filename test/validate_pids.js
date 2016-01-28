@@ -174,7 +174,7 @@ var findInvalidPids = function(results) {
 var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
     it('should have a valid PID value', function() {
-      expect(ref).to.exist();
+      expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
     });
 
