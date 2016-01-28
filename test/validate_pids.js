@@ -235,7 +235,7 @@ var resolveUrlAndTest = function(ref) {
           .catch(function(err) {
             console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
           });
-        return req.should.eventually.have.length.above(0);
+        return expect(req).to.eventually.have.property('responseCode', 1);
       });
     });
   });
