@@ -70,8 +70,11 @@ var findQuery = function() {
             path: '_session',
             select: '_id'
           })
-          .exec(function(err, query) {
-            if (err) return done(err);
+          .exec(
+            (function(err, query) {
+            if (err)
+              return done(err);
+
             query.should.be.an('object');
             expect(query._session._id).to.equal(session._id.toString());
 
@@ -81,7 +84,7 @@ var findQuery = function() {
               parseQuery(query); // update content PID with content PID with corrected url ref
             else
               throw new Error("No Query found for Session: " + session._id);
-          }).should.not.throw(Error);
+          }).should.not.throw(Error));
       });
     });
   });
