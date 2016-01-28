@@ -7,8 +7,11 @@
  *
  */
 
+var chaiAsPromised = require("chai-as-promised");
 var chai = require('chai'),
-  expect = chai.expect,
+chai.use(chaiAsPromised);
+
+var  expect = chai.expect,
   should = chai.should();
 
 //var request = require('request');
@@ -227,12 +230,12 @@ var resolveUrlAndTest = function(ref) {
             // Handle JSON response from Handle API
 
             handleAPIResponse(refID, body);
-
           });
         //          .catch(function(err) {
         //console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
         //          });
         req.should.be.fulfilled.and.notify(done);
+        return req;
       });
     });
   });
