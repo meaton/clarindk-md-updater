@@ -179,6 +179,7 @@ var resolveUrlAndTest = function(ref) {
     });
 
     describe('resolve testing', function() {
+
       it('should resolve', function(done) {
         // REST PID Manager url
         /* var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
@@ -204,7 +205,6 @@ var resolveUrlAndTest = function(ref) {
 
         var req = rp(options)
           .then(function(body) {
-
             console.log('received body: ', JSON.stringify(body));
 
             //console.log('status:', resp.statusCode);
@@ -235,7 +235,6 @@ var resolveUrlAndTest = function(ref) {
         //console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
         //          });
         req.should.be.fulfilled.and.notify(done);
-        return req;
       });
     });
   });
