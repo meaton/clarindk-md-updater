@@ -154,16 +154,13 @@ var findInvalidPids = function(results) {
 
     before(function(done) {
       async.map(results, function(record, callback) {
-            //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            resolveUrlAndTest(pidVal);
             callback(null, pidVal);
           });
       },
       function(err, records) {
         self.records = records;
-        done();
       });
     });
 
@@ -171,6 +168,18 @@ var findInvalidPids = function(results) {
       expect(records).to.exist();
       expect(records).to.not.be.empty;
     });
+
+    after(function() {
+      _.each(records, resolveUrlAndTest);
+    });
+
+    //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
+    /*it('should return more than 1 PID references', function() {
+        expect(pidVal).to.have.length.above(1);
+        //_.each(pidVal, resolveUrlAndTest);
+      });
+    });*/
+    
   });
 };
 
