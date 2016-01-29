@@ -287,10 +287,6 @@ var resolveUrlAndTest = function(res) {
         });
       });
     });
-
-    after(function() {
-      console.log(json_data);
-    });
   });
 };
 
