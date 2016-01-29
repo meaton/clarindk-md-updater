@@ -143,8 +143,9 @@ var parseQuery = function(queryResult, callback) {
       queryResult.should.have.property('result_collection');
       //assert.lengthOf(queryResult.result_collection, config.expectedQuerySize);
     });
-    after(function() {
+    after(function(done) {
       findInvalidPids(queryResult.result_collection);
+      done();
     });
   });
 };
