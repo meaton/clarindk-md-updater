@@ -156,7 +156,8 @@ var findInvalidPids = function(results) {
       async.map(results, function(record, callback) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            callback(null,  { id: pidVal.id, ref: pidVal['ResourceRef']['$t'] } );
+            pidVal = _.map(pidVal, function(val) { return { val.id, val['ResourceRef']['$t'] } });
+            callback(null, pidVal);
           });
       },
       function(err, results) {
@@ -172,7 +173,9 @@ var findInvalidPids = function(results) {
 
     after(function() {
       _.each(records, function(val) {
-        console.log('logged val: ' + val.id);
+        _.each(val, function(res) {
+          console.log('logged val: ' + res.id);
+        });
       });
     });
 
@@ -182,14 +185,14 @@ var findInvalidPids = function(results) {
         //_.each(pidVal, resolveUrlAndTest);
       });
     });*/
-
   });
 };
 
 var resolveUrlAndTest = function(res) {
   describe('validate resources ref ' + res.id + ' and resolve PID', function() {
     var body = null;
-    beforeEach(function(done) {
+
+    before(function(done) {
       //this.timeout(5000);
 
       // Handle.net API
@@ -256,12 +259,12 @@ var resolveUrlAndTest = function(res) {
         var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
       */
     });
-  });
 
-  after(function() {
-    setTimeout(function() {
-      console.log('after'); },
-    100);
+    after(function() {
+      setTimeout(function() {
+        console.log('after'); },
+      100);
+    });
   });
 };
 
