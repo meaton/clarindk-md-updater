@@ -264,29 +264,32 @@ var resolveUrlAndTest = function(res) {
       });
     });
 
+    afterEach(function(done) {
+      setTimeout(function() {
+        console.log('after each: ' + res.id);
+        done();
+        // Handle JSON response from Handle API
+        handleAPIResponse(res.id, json_data);
+       },
+      100);
+    });
+
     it('should have a valid PID value ' + res.id, function() {
       expect(res).to.exist;
       expect(res).to.have.property('ref');
       expect(json_data).to.not.equal(null);
-    });
-
-    afterEach(function() {
-      setTimeout(function() {
-        // Handle JSON response from Handle API
-        handleAPIResponse(res.id, json_data);
-        console.log('after each: ' + res.id);
-       },
-      100);
     });
   });
 };
 
 var handleAPIResponse = function(refID, body) {
   console.log('handle API resp: ' + refID);
+
   describe('check against the PID data properties', function() {
     describe('#parseRecord', function() {
 
       it('should contain valid property values', function(done) {
+
         parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
           console.log('url prop:', pidRef);
           expect(pidRef).to.exist();
