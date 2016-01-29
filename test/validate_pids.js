@@ -156,7 +156,7 @@ var findInvalidPids = function(results) {
       async.map(results, function(record, callback) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            callback(null, function(callback) { resolveUrlAndTest(callback, pidVal); });
+            callback(null,  pidVal);
           });
       },
       function(err, results) {
@@ -171,7 +171,9 @@ var findInvalidPids = function(results) {
     });
 
     after(function() {
-      async.series(records);
+      _.each(records, function(val) {
+        console.log('logged val: ' + val);
+      });
     });
 
     //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
@@ -184,7 +186,7 @@ var findInvalidPids = function(results) {
   });
 };
 
-var resolveUrlAndTest = function(callback, ref) {
+var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
     var body = null;
     beforeEach(function(done) {
@@ -258,7 +260,7 @@ var resolveUrlAndTest = function(callback, ref) {
 
   after(function() {
     setTimeout(function() {
-      callback(null); },
+      console.log('after'); },
     100);
   });
 };
