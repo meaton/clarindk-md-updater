@@ -156,7 +156,7 @@ var findInvalidPids = function(results) {
       async.map(results, function(record, callback) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            callback(null, pidVal);
+            callback(null, _.bind(resolveUrlAndTest, self, pidVal));
           });
       },
       function(err, records) {
@@ -170,7 +170,7 @@ var findInvalidPids = function(results) {
     });
 
     after(function() {
-      _.each(records, resolveUrlAndTest);
+      async.series(records);
     });
 
     //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
@@ -179,15 +179,15 @@ var findInvalidPids = function(results) {
         //_.each(pidVal, resolveUrlAndTest);
       });
     });*/
-    
+
   });
 };
 
 var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
     var body = null;
-    before(function(done) {
-      this.timeout(5000);
+    beforeEach(function(done) {
+      //this.timeout(5000);
 
       // Handle.net API
       var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'http://hdl.handle.net/api/handles/');
@@ -208,8 +208,7 @@ var resolveUrlAndTest = function(ref) {
         if(err) throw err;
         console.log('resp: ' + resp.statusCode);
         this.body = body;
-
-        setTimeout(done, 1000);
+        done();
       });
         /*.then(function(body) {
           //console.log('received body: ', JSON.stringify(body));
