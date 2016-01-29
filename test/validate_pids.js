@@ -274,6 +274,7 @@ var resolveUrlAndTest = function(res) {
       setTimeout(function() {
         // Handle JSON response from Handle API
         handleAPIResponse(res.id, json_data);
+        console.log('after each: ' + res.id);
        },
       100);
     });
@@ -281,8 +282,10 @@ var resolveUrlAndTest = function(res) {
 };
 
 var handleAPIResponse = function(refID, body) {
+  console.log('handle API resp: ' + refID);
   describe('check against the PID data properties', function() {
     describe('#parseRecord', function() {
+
       it('should contain valid property values', function(done) {
         parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
           console.log('url prop:', pidRef);
