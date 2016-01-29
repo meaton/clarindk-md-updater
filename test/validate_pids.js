@@ -264,12 +264,7 @@ var resolveUrlAndTest = function(res) {
       });
     });
 
-    after(function(done) {
-      setTimeout(function() {
-        console.log('after each: ' + res.id);
-        done();
-       },
-      100);
+    after(handleAPIResponse, 100, json_data);
     });
 
     it('should have a valid PID value ' + res.id, function() {
@@ -278,14 +273,9 @@ var resolveUrlAndTest = function(res) {
     });
 
     describe('test API response', function() {
-      it('should have a valid json response', function(done) {
+      it('should have a valid json response', function() {
         expect(json_data).to.not.equal(null);
-        done();
       });
-      after(function() {
-        if(json_data != null)
-          handleAPIResponse(res.id, json_data);
-      })
     });
   });
 };
