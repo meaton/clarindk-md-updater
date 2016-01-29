@@ -336,7 +336,7 @@ var handleAPIResponse = function(refID, body, callback) {
 
       // landing page ref mismatch
       console.error('err: LP ref does not match id ', refID);
-
+    } else {
       callback();
     }
   });
