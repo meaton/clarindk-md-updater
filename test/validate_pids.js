@@ -221,8 +221,10 @@ var resolveUrlAndTest = function(ref) {
           // Handle JSON response from Handle API
           //handleAPIResponse(refID, body);
         })
+        .then(function() {
+          done();
+        })
         .catch(function(err) {
-          done(err);
           console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', ref.id, ' record: ', record.dkclarinID);
         });
 
