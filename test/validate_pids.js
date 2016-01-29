@@ -232,7 +232,7 @@ var resolveUrlAndTest = function(ref) {
         })
         .then(function () {
           done();
-        }).
+        })
         .catch(function(err) {
           done(err);
           console.error('error: Error occurred resolving PID ', pidRef, ' ref ID: ', refID, ' record: ', record.dkclarinID);
