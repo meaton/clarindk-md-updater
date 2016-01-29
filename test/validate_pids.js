@@ -161,10 +161,11 @@ var findInvalidPids = function(results) {
       it('should return more than 1 PID references', function(done) {
         parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
           expect(pidVal).to.have.length.above(1);
-
           done();
 
-          _.each(pidVal, resolveUrlAndTest);
+          _.each(pidVal, function(val) {
+            _.delay(_.bind(resolveUrlAndTest, this), 500, val);
+          });
         });
       });
     });
@@ -214,6 +215,8 @@ var resolveUrlAndTest = function(ref) {
 
           console.log('processing ', refID);
 
+          done();
+
           /* // Handle XML response from REST PID Manager
           var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
           var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
@@ -230,12 +233,9 @@ var resolveUrlAndTest = function(ref) {
 
           handleAPIResponse(refID, body);
         })
-        .then(function () {
-          done();
-        })
         .catch(function(err) {
           done(err);
-          console.error('error: Error occurred resolving PID ', pidRef, ' ref ID: ', refID, ' record: ', record.dkclarinID);
+          console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', refID, ' record: ', record.dkclarinID);
         });
     });
   });
