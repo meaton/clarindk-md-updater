@@ -278,9 +278,13 @@ var resolveUrlAndTest = function(res) {
     });
 
     describe('test API response', function() {
-      // Handle JSON response from Handle API
-      if(json_data != null)
-        handleAPIResponse(res.id, json_data);
+      it('should have a valid json response', function(done) {
+        expect(body).to.not.equal(null);
+        done();
+
+        if(json_data != null)
+          handleAPIResponse(res.id, json_data);
+      });
     });
   });
 };
@@ -289,10 +293,6 @@ var handleAPIResponse = function(refID, body) {
   describe('check against the PID data properties', function() {
 
     describe('#parseRecord', function() {
-
-      it('should have a valid json response', function() {
-        expect(body).to.not.equal(null);
-      });
 
       it('should contain valid property values', function(done) {
         console.log('handle API resp: ' + refID);
