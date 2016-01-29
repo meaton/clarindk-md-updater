@@ -283,7 +283,6 @@ var resolveUrlAndTest = function(res) {
         context('when has body response', function() {
           it('should be a valid response', function(done) {
             handleAPIResponse(res.id, json_data, function() {
-              console.log('callback');
               done();
             });
           });
@@ -298,15 +297,13 @@ var handleAPIResponse = function(refID, body, callback) {
   console.log('handle responseCode: ' + body.responseCode);
 
   parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
-    console.log('url prop:', pidRef);
-
+    //console.log('url prop:', pidRef);
     var valUrl = url.parse(pidRef);
-
     var isContentRef = (refID.indexOf('_') == 0);
     var _id = refID.substr(refID.indexOf('_') + 1);
 
     var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
-    console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
+    //console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
 
     expect(pidRef).to.exist;
     expect(refMatch).to.be.true;
@@ -316,7 +313,7 @@ var handleAPIResponse = function(refID, body, callback) {
       //console.log('ref ID: ' + refID);
 
       parseRecord(body, '$.values[?(@.type === "MD5")].data.value', function(checksum) {
-        console.log('url checksum:', checksum);
+        //console.log('url checksum:', checksum);
 
         expect(checksum).to.exist;
         expect(checksum).to.match(/^[0-9a-f]{32}$/);
