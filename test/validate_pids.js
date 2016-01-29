@@ -259,10 +259,11 @@ var resolveUrlAndTest = function(res) {
         // Handle JSON response from Handle API
         //handleAPIResponse(refID, body);
       })
+      .then(function() { done(); })
       .catch(function(err) {
+        done(err);
         console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
       });
-      return req.should.be.fulfilled.notify(done);
     });
 
     it('should have a valid PID value ' + res.id, function() {
