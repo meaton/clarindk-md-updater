@@ -150,7 +150,8 @@ var parseQuery = function(queryResult, callback) {
 
 var findInvalidPids = function(results) {
   describe('find all records with invalid PIDs', function() {
-    var self = this, records = null;
+    var self = this,
+    this.records = null;
 
     before(function(done) {
       async.map(results, function(record, callback) {
@@ -166,12 +167,12 @@ var findInvalidPids = function(results) {
     });
 
     it('should return a valid set record', function() {
-      expect(records).to.exist();
-      expect(records).to.not.be.empty;
+      expect(self.records).to.exist();
+      expect(self.records).to.not.be.empty;
     });
 
     after(function() {
-      async.series(records);
+      async.series(self.records);
     });
 
     //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
