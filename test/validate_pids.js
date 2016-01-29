@@ -192,7 +192,7 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(res) {
   describe('validate resources ref ' + res.id + ' and resolve PID', function() {
-    var json = null;
+    var json_data = null;
 
     before(function(done) {
       this.timeout(10000);
@@ -240,7 +240,7 @@ var resolveUrlAndTest = function(res) {
         //console.log('status:', resp.statusCode);
         //var refID = querystring.parse(resp.request.uri.query).ref;
 
-        json = body;
+        json_data = body;
 
         console.log('testing... ', res.id);
 
@@ -255,9 +255,6 @@ var resolveUrlAndTest = function(res) {
           return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
         }).pluck('textContent').value();
         */
-
-        // Handle JSON response from Handle API
-        //handleAPIResponse(refID, body);
       })
       .then(function() { done(); })
       .catch(function(err) {
@@ -269,11 +266,14 @@ var resolveUrlAndTest = function(res) {
     it('should have a valid PID value ' + res.id, function() {
       expect(res).to.exist;
       expect(res).to.have.property('ref');
+      expect(json_data).to.not.equal(null);
     });
 
     after(function() {
       setTimeout(function() {
-        console.log('after'); },
+        // Handle JSON response from Handle API
+        handleAPIResponse(res.id, json_data);
+       },
       100);
     });
   });
