@@ -235,7 +235,7 @@ var resolveUrlAndTest = function(res) {
       });*/
 
       // request-promise
-      var req = rp(options).then(function(body) {
+      var req = rp(api_options).then(function(body) {
         //console.log('received body: ', JSON.stringify(body));
         //console.log('status:', resp.statusCode);
         //var refID = querystring.parse(resp.request.uri.query).ref;
