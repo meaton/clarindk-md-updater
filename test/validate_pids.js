@@ -255,12 +255,8 @@ var resolveUrlAndTest = function(res) {
           return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
         }).pluck('textContent').value();
         */
-      })
-      .then(function() {
-        done();
 
-        // Handle JSON response from Handle API
-        handleAPIResponse(res.id, json_data);
+        done();
       })
       .catch(function(err) {
         done(err);
@@ -274,9 +270,10 @@ var resolveUrlAndTest = function(res) {
       expect(json_data).to.not.equal(null);
     });
 
-    after(function() {
+    afterEach(function() {
       setTimeout(function() {
-        console.log('after');
+        // Handle JSON response from Handle API
+        handleAPIResponse(res.id, json_data);
        },
       100);
     });
