@@ -296,12 +296,12 @@ var resolveUrlAndTest = function(res) {
 
 var handleAPIResponse = function(refID, body, done) {
   console.log('handle API resp: ' + refID);
-  console.log('body length: ' + body.length);
+  console.log('handle responseCode: ' + body.responseCode);
 
   parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
     console.log('url prop:', pidRef);
 
-    expect(pidRef).to.exist();
+    expect(pidRef).to.exist;
 
     var valUrl = url.parse(pidRef);
 
