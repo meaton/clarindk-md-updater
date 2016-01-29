@@ -217,7 +217,7 @@ var resolveUrlAndTest = function(ref) {
             return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
           }).pluck('textContent').value();
           */
-          done();
+
           // Handle JSON response from Handle API
           //handleAPIResponse(refID, body);
         })
@@ -225,6 +225,8 @@ var resolveUrlAndTest = function(ref) {
           done(err);
           console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', ref.id, ' record: ', record.dkclarinID);
         });
+
+        req.should.be.fulfilled.notify(done);
     });
 
     it('should have a valid PID value ' + ref.id, function() {
