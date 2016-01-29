@@ -299,7 +299,7 @@ var handleAPIResponse = function(refID, body, done) {
     var _id = refID.substr(refID.indexOf('_') + 1);
 
     var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
-    console.log('refMatch:' + refMatch, ' path: ' + options.uri, ' id: ' + _id, ' url: ' + valUrl.pathname);
+    console.log('refMatch:' + refMatch, ' path: ' + url.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
 
     expect(pidRef).to.exist;
     expect(refMatch).to.be.true;
