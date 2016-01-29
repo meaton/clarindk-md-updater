@@ -195,7 +195,7 @@ var resolveUrlAndTest = function(res) {
     var json = null;
 
     before(function(done) {
-      //this.timeout(5000);
+      this.timeout(10000);
 
       // Handle.net API
       var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/') : null;
