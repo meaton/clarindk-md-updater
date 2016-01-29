@@ -161,6 +161,7 @@ var findInvalidPids = function(results) {
       },
       function(err, records) {
         self.records = records;
+        done();
       });
     });
 
