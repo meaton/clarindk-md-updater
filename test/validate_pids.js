@@ -14,6 +14,8 @@ chai.use(chaiAsPromised);
 var expect = chai.expect,
   should = chai.should();
 
+var async = require('async');
+
 var request = require('request');
 var rp = require('request-promise');
 var mg = require('mongoose');
@@ -78,7 +80,6 @@ var findQuery = function() {
               return done(err);
 
             query.should.be.an('object');
-
             //expect(query._session._id).to.equal(session._id);
 
             done();
@@ -149,25 +150,26 @@ var parseQuery = function(queryResult, callback) {
 
 var findInvalidPids = function(results) {
   describe('find all records with invalid PIDs', function() {
-    _.each(results, function(record) {
-      var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
+    var self = this, records = null;
 
-      /*it('should return a valid record', function() {
-        expect(record).to.exist();
-        expect(record).to.not.be.empty;
-      });*/
-
-      //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
-      it('should return more than 1 PID references', function(done) {
-        parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-          expect(pidVal).to.have.length.above(1);
-          done();
-
-          _.each(pidVal, function(val) {
-            _.delay(_.bind(resolveUrlAndTest, this), 2000, val);
+    before(function(done) {
+      async.map(results, function(record, callback) {
+            //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
+          var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
+          parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
+            resolveUrlAndTest(pidVal);
+            callback(null, pidVal);
           });
-        });
+      },
+      function(err, records) {
+        self.records = records;
+        done();
       });
+    });
+
+    it('should return a valid set record', function() {
+      expect(records).to.exist();
+      expect(records).to.not.be.empty;
     });
   });
 };
@@ -175,8 +177,9 @@ var findInvalidPids = function(results) {
 var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
     var body = null;
+    before(function(done) {
+      this.timeout(5000);
 
-    beforeEach(function(done) {
       // Handle.net API
       var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'http://hdl.handle.net/api/handles/');
       var options = {
@@ -193,9 +196,11 @@ var resolveUrlAndTest = function(ref) {
       };
 
       request(options, function(err, resp, body) {
+        if(err) throw err;
         console.log('resp: ' + resp.statusCode);
-        body = body;
-        done();
+        this.body = body;
+
+        setTimeout(done, 1000);
       });
         /*.then(function(body) {
           //console.log('received body: ', JSON.stringify(body));
@@ -228,7 +233,7 @@ var resolveUrlAndTest = function(ref) {
         //req.should.be.fulfilled.notify(done);
     });
 
-    it('should have a valid PID value ' + ref.id, function() {
+    it('should have a valid PID value ' + ref.id, function(done) {
       expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
 
@@ -239,6 +244,7 @@ var resolveUrlAndTest = function(ref) {
         var hrTime = process.hrtime();
         var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
       */
+      done();
     });
   });
 };
