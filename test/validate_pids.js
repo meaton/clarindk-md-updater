@@ -293,8 +293,6 @@ var handleAPIResponse = function(refID, body, done) {
   parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
     console.log('url prop:', pidRef);
 
-    expect(pidRef).to.exist;
-
     var valUrl = url.parse(pidRef);
 
     var isContentRef = (refID.indexOf('_') == 0);
@@ -302,6 +300,8 @@ var handleAPIResponse = function(refID, body, done) {
 
     var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
     console.log('refMatch:' + refMatch, ' path: ' + options.uri, ' id: ' + _id, ' url: ' + valUrl.pathname);
+
+    expect(pidRef).to.exist;
     expect(refMatch).to.be.true;
 
     if (isContentRef) {
