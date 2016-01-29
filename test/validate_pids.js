@@ -201,26 +201,30 @@ var resolveUrlAndTest = function(res) {
       var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/') : null;
 
       /* // REST PID Manager url
-        var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
+        var pidUrl = res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
         var hrTime = process.hrtime();
         var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+        var pidManager_options = {
+          //method: 'GET',
+          //url: pidUrl + '/url?ref=' + res.id + '&token=' + timestamp,  // res.id pass to request, timestamp milliseconds prevent cached request
+          /*auth: {
+            'user': config.pidmanager_auth_user,
+            'password': config.pidmanager_auth_pass
+          }
+        }*/
+      }
       */
 
-      var options = {
-        //method: 'GET',
+      var api_options = {
+        method: 'GET',
         url: pidUrl,
-        //url: pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,  // ref.id pass to request, timestamp milliseconds prevent cached request
-        /*auth: {
-          'user': config.pidmanager_auth_user,
-          'password': config.pidmanager_auth_pass
-        },*/
         headers: {
           'Cache-Control': 'no-cache'
         },
         json: true
       };
 
-      request(options, function(err, resp, body) {
+      /*request(api_options, function(err, resp, body) {
         if(err)
           return done(err);
 
@@ -229,23 +233,20 @@ var resolveUrlAndTest = function(res) {
         json = body;
 
         done();
-      });
+      });*/
 
-      /* // request-promise
+      // request-promise
       var req = rp(options).then(function(body) {
         //console.log('received body: ', JSON.stringify(body));
         //console.log('status:', resp.statusCode);
-
         //var refID = querystring.parse(resp.request.uri.query).ref;
-        //console.log('req url:', resp.request.uri.href);
-        //console.log('ref from querystring: ' + refID);
 
         json = body;
 
-        console.log('processing ', ref.id);
+        console.log('testing... ', res.id);
 
         // Handle XML response from REST PID Manager
-        var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
+        /*var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
         var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
         .filter(function(val) {
           return (val.textContent.indexOf('http') > -1); // url value
@@ -254,20 +255,20 @@ var resolveUrlAndTest = function(res) {
         .filter(function(val) {
           return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
         }).pluck('textContent').value();
+        */
 
         // Handle JSON response from Handle API
-        handleAPIResponse(refID, body);
+        //handleAPIResponse(refID, body);
       })
       .catch(function(err) {
-        console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', ref.id, ' record: ', record.dkclarinID);
+        console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
       });
-      req.should.be.fulfilled.notify(done);
-      */
+      return req.should.be.fulfilled.notify(done);
     });
 
     it('should have a valid PID value ' + res.id, function() {
       expect(res).to.exist;
-      expect(res.to.have.property('ref'));
+      expect(res).to.have.property('ref');
     });
 
     after(function() {
