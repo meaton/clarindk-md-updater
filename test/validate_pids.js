@@ -286,15 +286,15 @@ var resolveUrlAndTest = function(res) {
 };
 
 var handleAPIResponse = function(refID, body) {
-  console.log('handle API resp: ' + refID);
-
   describe('check against the PID data properties', function() {
     describe('#parseRecord', function() {
 
       it('should contain valid property values', function(done) {
-
+        console.log('handle API resp: ' + refID);
+        console.log('body length: ' + body.length);
         parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
           console.log('url prop:', pidRef);
+
           expect(pidRef).to.exist();
 
           var valUrl = url.parse(pidRef);
