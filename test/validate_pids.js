@@ -174,18 +174,9 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
-    it('should have a valid PID value ' + ref.id, function(done) {
-      expect(ref).to.exist;
-      expect(ref).to.have.deep.property('ResourceRef.$t');
+    var body = null;
 
-      //describe('resolve testing', function() {
-      //it('should resolve', function() {
-      // REST PID Manager url
-      /* var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
-        var hrTime = process.hrtime();
-        var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
-      */
-
+    beforeEach(function(done) {
       // Handle.net API
       var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'http://hdl.handle.net/api/handles/');
       var options = {
@@ -211,11 +202,9 @@ var resolveUrlAndTest = function(ref) {
           //console.log('req url:', resp.request.uri.href);
           //console.log('ref from querystring: ' + refID);
 
-          var refID = ref.id;
+          body = body;
 
-          console.log('processing ', refID);
-
-          done();
+          console.log('processing ', ref.id);
 
           /* // Handle XML response from REST PID Manager
           var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
@@ -228,15 +217,28 @@ var resolveUrlAndTest = function(ref) {
             return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
           }).pluck('textContent').value();
           */
-
+          done();
           // Handle JSON response from Handle API
-
-          handleAPIResponse(refID, body);
+          //handleAPIResponse(refID, body);
         })
         .catch(function(err) {
           done(err);
-          console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', refID, ' record: ', record.dkclarinID);
+          console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', ref.id, ' record: ', record.dkclarinID);
         });
+    });
+
+    it('should have a valid PID value ' + ref.id, function() {
+      expect(ref).to.exist;
+      expect(ref).to.have.deep.property('ResourceRef.$t');
+      expect(body).to.exist;
+
+      //describe('resolve testing', function() {
+      //it('should resolve', function() {
+      // REST PID Manager url
+      /* var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
+        var hrTime = process.hrtime();
+        var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+      */
     });
   });
 };
