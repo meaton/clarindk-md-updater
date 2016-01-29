@@ -156,7 +156,7 @@ var findInvalidPids = function(results) {
       async.map(results, function(record, callback) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            callback(null, _.bind(resolveUrlAndTest, this, pidVal));
+            callback(null, function(callback) { resolveUrlAndTest(callback, pidVal); });
           });
       },
       function(err, results) {
