@@ -264,9 +264,6 @@ var resolveUrlAndTest = function(res) {
       });
     });
 
-    after(handleAPIResponse, 100, json_data);
-    });
-
     it('should have a valid PID value ' + res.id, function() {
       expect(res).to.exist;
       expect(res).to.have.property('ref');
@@ -277,6 +274,8 @@ var resolveUrlAndTest = function(res) {
         expect(json_data).to.not.equal(null);
       });
     });
+
+    after(handleAPIResponse, 100, json_data);
   });
 };
 
