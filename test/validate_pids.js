@@ -136,7 +136,7 @@ var updateRecord = function(invalidPID, idRef, refUrl, type, checksum) {
 };
 
 var parseQuery = function(queryResult, callback) {
-  console.log('result length: ' + queryResult.result_collection.length);
+  //console.log('result length: ' + queryResult.result_collection.length);
   describe('parse result collection', function() {
     it('should contain some records', function() {
       expect(queryResult).to.exist;
@@ -293,8 +293,8 @@ var resolveUrlAndTest = function(res) {
 };
 
 var handleAPIResponse = function(refID, body, callback) {
-  console.log('handle API resp: ' + refID);
-  console.log('handle responseCode: ' + body.responseCode);
+  //console.log('handle API resp: ' + refID);
+  //console.log('handle responseCode: ' + body.responseCode);
 
   parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
     //console.log('url prop:', pidRef);
