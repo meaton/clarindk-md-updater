@@ -14,7 +14,7 @@ chai.use(chaiAsPromised);
 var expect = chai.expect,
   should = chai.should();
 
-//var request = require('request');
+var request = require('request');
 var rp = require('request-promise');
 var mg = require('mongoose');
 
@@ -180,8 +180,7 @@ var resolveUrlAndTest = function(ref) {
       // Handle.net API
       var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'http://hdl.handle.net/api/handles/');
       var options = {
-        method: 'GET',
-        uri: pidUrl,
+        url: pidUrl,
         //url: pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,  // ref.id pass to request, timestamp milliseconds prevent cached request
         /*auth: {
           'user': config.pidmanager_auth_user,
@@ -193,17 +192,19 @@ var resolveUrlAndTest = function(ref) {
         json: true
       };
 
-      var req = rp(options)
-        .then(function(body) {
+      request(options, function(err, resp, body) {
+        console.log('resp: ' + resp.statusCode);
+        body = body;
+        done();
+      });
+        /*.then(function(body) {
           //console.log('received body: ', JSON.stringify(body));
-
           //console.log('status:', resp.statusCode);
           //var refID = querystring.parse(resp.request.uri.query).ref;
           //console.log('req url:', resp.request.uri.href);
           //console.log('ref from querystring: ' + refID);
 
           body = body;
-
           console.log('processing ', ref.id);
 
           /* // Handle XML response from REST PID Manager
@@ -220,15 +221,11 @@ var resolveUrlAndTest = function(ref) {
 
           // Handle JSON response from Handle API
           //handleAPIResponse(refID, body);
-        })
-        .then(function() {
-          done();
-        })
+        /*})
         .catch(function(err) {
           console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', ref.id, ' record: ', record.dkclarinID);
-        });
-
-        req.should.be.fulfilled.notify(done);
+        });*/
+        //req.should.be.fulfilled.notify(done);
     });
 
     it('should have a valid PID value ' + ref.id, function() {
