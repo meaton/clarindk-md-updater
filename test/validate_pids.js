@@ -166,7 +166,7 @@ var findInvalidPids = function(results) {
     });
 
     it('should return a valid set record', function() {
-      expect(records).to.exist();
+      expect(records).to.exist;
       expect(records).to.not.be.empty;
     });
 
