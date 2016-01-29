@@ -280,12 +280,12 @@ var resolveUrlAndTest = function(res) {
     describe('test API response', function() {
       it('should have a valid json response', function(done) {
         expect(json_data).to.not.equal(null);
-
-        if(json_data != null)
-          handleAPIResponse(res.id, json_data);
-
         done();
       });
+      after(function() {
+        if(json_data != null)
+          handleAPIResponse(res.id, json_data);
+      })
     });
   });
 };
