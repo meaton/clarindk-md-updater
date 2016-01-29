@@ -311,11 +311,9 @@ var handleAPIResponse = function(refID, body, callback) {
     expect(pidRef).to.exist;
     expect(refMatch).to.be.true;
 
-    console.log('test after expect');
-
     if(isContentRef) {
-      console.log('content PID: ' + ref['ResourceRef']['$t']);
-      console.log('ref ID: ' + refID);
+      //console.log('content PID: ' + ref['ResourceRef']['$t']);
+      //console.log('ref ID: ' + refID);
 
       parseRecord(body, '$.values[?(@.type === "MD5")].data.value', function(checksum) {
         console.log('url checksum:', checksum);
