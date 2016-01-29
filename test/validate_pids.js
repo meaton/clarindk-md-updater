@@ -275,12 +275,17 @@ var resolveUrlAndTest = function(res) {
     it('should have a valid PID value ' + res.id, function() {
       expect(res).to.exist;
       expect(res).to.have.property('ref');
-      expect(json_data).to.not.equal(null);
     });
 
     describe('test API response', function() {
+
+      it('should have a valid json response', function() {
+        expect(json_data).to.not.equal(null);
+      });
+
       // Handle JSON response from Handle API
-      handleAPIResponse(res.id, json_data);
+      if(json_data != null)
+        handleAPIResponse(res.id, json_data);
     });
   });
 };
