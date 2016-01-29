@@ -173,7 +173,7 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
-    it('should have a valid PID value ' + ref.id, function() {
+    it('should have a valid PID value ' + ref.id, function(done) {
       expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
 
@@ -230,11 +230,12 @@ var resolveUrlAndTest = function(ref) {
 
           handleAPIResponse(refID, body);
         })
+        .then(function () {
+          done();
+        });
         .catch(function(err) {
           console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
         });
-
-      return req.should.be.fulfilled;
     });
   });
 };
