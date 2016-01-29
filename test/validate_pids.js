@@ -211,9 +211,8 @@ var resolveUrlAndTest = function(res) {
             'user': config.pidmanager_auth_user,
             'password': config.pidmanager_auth_pass
           }
-        }*/
-      }
-      */
+        }
+      }*/
 
       var api_options = {
         method: 'GET',
