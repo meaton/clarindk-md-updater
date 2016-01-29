@@ -232,9 +232,10 @@ var resolveUrlAndTest = function(ref) {
         })
         .then(function () {
           done();
-        });
+        }).
         .catch(function(err) {
-          console.error('error: ' + resp.statusCode, 'ref ID: ', refID, 'record: ', record.dkclarinID);
+          done(err);
+          console.error('error: Error occurred resolving PID ', pidRef, ' ref ID: ', refID, ' record: ', record.dkclarinID);
         });
     });
   });
