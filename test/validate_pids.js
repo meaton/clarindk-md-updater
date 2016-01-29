@@ -282,7 +282,10 @@ var resolveUrlAndTest = function(res) {
       describe('#parseRecord', function() {
         context('when has body response', function() {
           it('should be a valid response', function(done) {
-            handleAPIResponse(res.id, json_data, done);
+            handleAPIResponse(res.id, json_data, function() {
+              console.log('callback');
+              done();
+            });
           });
         });
       });
@@ -290,7 +293,7 @@ var resolveUrlAndTest = function(res) {
   });
 };
 
-var handleAPIResponse = function(refID, body, done) {
+var handleAPIResponse = function(refID, body, callback) {
   console.log('handle API resp: ' + refID);
   console.log('handle responseCode: ' + body.responseCode);
 
@@ -308,6 +311,8 @@ var handleAPIResponse = function(refID, body, done) {
     expect(pidRef).to.exist;
     expect(refMatch).to.be.true;
 
+    console.log('test after expect');
+
     if(isContentRef) {
       console.log('content PID: ' + ref['ResourceRef']['$t']);
       console.log('ref ID: ' + refID);
@@ -324,7 +329,7 @@ var handleAPIResponse = function(refID, body, done) {
           else
             console.error('err: Illegal or missing checksum value pid: ', refID);
           */
-        done();
+        callback();
       });
     } else if (!refMatch) {
       /*if (callback)
@@ -334,7 +339,7 @@ var handleAPIResponse = function(refID, body, done) {
       // landing page ref mismatch
       console.error('err: LP ref does not match id ', refID);
 
-      done();
+      callback();
     }
   });
 };
