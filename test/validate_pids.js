@@ -164,7 +164,7 @@ var findInvalidPids = function(results) {
           done();
 
           _.each(pidVal, function(val) {
-            _.delay(_.bind(resolveUrlAndTest, this), 500, val);
+            _.delay(_.bind(resolveUrlAndTest, this), 2000, val);
           });
         });
       });
@@ -230,7 +230,6 @@ var resolveUrlAndTest = function(ref) {
     it('should have a valid PID value ' + ref.id, function() {
       expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
-      expect(body).to.exist;
 
       //describe('resolve testing', function() {
       //it('should resolve', function() {
