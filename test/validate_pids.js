@@ -157,14 +157,19 @@ var findInvalidPids = function(results) {
       async.map(results, function(record, callback) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            pidVal = _.map(pidVal, function(val) { return { id: val.id, ref: val['ResourceRef']['$t'] } });
+            pidVal = _.map(pidVal, function(val) {
+              return {
+                id: val.id,
+                ref: val['ResourceRef']['$t']
+              }
+            });
             callback(null, pidVal);
           });
-      },
-      function(err, results) {
-        records = results;
-        done();
-      });
+        },
+        function(err, results) {
+          records = results;
+          done();
+        });
     });
 
     it('should return a valid set record', function() {
@@ -236,32 +241,32 @@ var resolveUrlAndTest = function(res) {
 
       // request-promise
       var req = rp(api_options).then(function(body) {
-        //console.log('received body: ', JSON.stringify(body));
-        //console.log('status:', resp.statusCode);
-        //var refID = querystring.parse(resp.request.uri.query).ref;
+          //console.log('received body: ', JSON.stringify(body));
+          //console.log('status:', resp.statusCode);
+          //var refID = querystring.parse(resp.request.uri.query).ref;
 
-        json_data = body;
+          json_data = body;
 
-        console.log('testing... ', res.id);
+          console.log('testing... ', res.id);
 
-        // Handle XML response from REST PID Manager
-        /*var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
-        var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-        .filter(function(val) {
-          return (val.textContent.indexOf('http') > -1); // url value
-        }).pluck('textContent').value();
-        var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-        .filter(function(val) {
-          return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
-        }).pluck('textContent').value();
-        */
+          // Handle XML response from REST PID Manager
+          /*var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
+          var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+          .filter(function(val) {
+            return (val.textContent.indexOf('http') > -1); // url value
+          }).pluck('textContent').value();
+          var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+          .filter(function(val) {
+            return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
+          }).pluck('textContent').value();
+          */
 
-        done();
-      })
-      .catch(function(err) {
-        done(err);
-        console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
-      });
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+          console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
+        });
     });
 
     it('should have a valid PID value ' + res.id, function() {
@@ -273,71 +278,69 @@ var resolveUrlAndTest = function(res) {
       it('should have a valid json response', function() {
         expect(json_data).to.not.equal(null);
       });
+
+      describe('check against the PID data properties', function() {
+        describe('#parseRecord', function() {
+          it('should contain valid property values', function(done) {
+            handleAPIResponse(res.id, json_data, done);
+          });
+        });
+      });
     });
 
-    after(function(done) {
-      handleAPIResponse(json_data)
-      done();
+    after(function() {
+      console.log(json_data);
     });
   });
 };
 
-var handleAPIResponse = function(refID, body) {
-  describe('check against the PID data properties', function() {
+var handleAPIResponse = function(refID, body, done) {
+  console.log('handle API resp: ' + refID);
+  console.log('body length: ' + body.length);
 
-    describe('#parseRecord', function() {
+  parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
+    console.log('url prop:', pidRef);
 
-      it('should contain valid property values', function(done) {
-        console.log('handle API resp: ' + refID);
-        console.log('body length: ' + body.length);
-        parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
-          console.log('url prop:', pidRef);
+    expect(pidRef).to.exist();
 
-          expect(pidRef).to.exist();
+    var valUrl = url.parse(pidRef);
 
-          var valUrl = url.parse(pidRef);
+    var isContentRef = (refID.indexOf('_') == 0);
+    refID = refID.substr(refID.indexOf('_') + 1);
 
-          var isContentRef = (refID.indexOf('_') == 0);
-          refID = refID.substr(refID.indexOf('_') + 1);
+    var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
+    console.log('refMatch:' + refMatch, ' path: ' + options.uri, ' ref ID: ' + refID, ' url: ' + valUrl.pathname);
 
-          var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
-          console.log('refMatch:' + refMatch, ' path: ' + options.uri, ' ref ID: ' + refID, ' url: ' + valUrl.pathname);
+    expect(refMatch).to.be.true;
 
-          expect(refMatch).to.be.true;
+    if (isContentRef) {
+      console.log('content PID: ' + ref['ResourceRef']['$t']);
+      console.log('ref ID: ' + refID);
 
-          if (isContentRef) {
-            console.log('content PID: ' + ref['ResourceRef']['$t']);
-            console.log('ref ID: ' + refID);
+      parseRecord(body, '$.values[?(@.type === "MD5")].data.value', function(checksum) {
+        console.log('url checksum:', checksum);
 
-            parseRecord(body, '$.values[?(@.type === "MD5")].data.value', function(checksum) {
-              console.log('url checksum:', checksum);
+        expect(checksum).to.exist;
+        expect(/^[0-9a-f]{32}$/.test(checksum)).to.be.true;
 
-              expect(checksum).to.exist;
-              expect(/^[0-9a-f]{32}$/.test(checksum)).to.be.true;
+        if (checksum != null && checksum.length > 0 && /^[0-9a-f]{32}$/.test(checksum))
+          if (callback)
+            callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", checksum);
+          else
+            console.error('err: Illegal or missing checksum value pid: ', refID);
 
-              if (checksum != null && checksum.length > 0 && /^[0-9a-f]{32}$/.test(checksum))
-                if (callback)
-                  callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", checksum);
-                else
-                  console.error('err: Illegal or missing checksum value pid: ', refID);
+        done();
+      });
+    } else if (!refMatch) {
+      if (callback)
+        callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "lp");
 
-              done();
-            });
-          } else if (!refMatch) {
-            if (callback)
-              callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "lp");
+      // landing page ref mismatch
+      console.error('err: LP ref does not match id ', refID);
 
-            // landing page ref mismatch
-            console.error('err: LP ref does not match id ', refID);
-
-            done();
-          }
-        });//parseRecord
-      });//it
-
-    });//describe
-
-  });//describe
+      done();
+    }
+  }); //parseRecord
 };
 
 // parse records, iterate over resource proxies (pid refs)
