@@ -265,9 +265,6 @@ var resolveUrlAndTest = function(res) {
     });
 
     after(function(done) {
-      // Handle JSON response from Handle API
-      handleAPIResponse(res.id, json_data);
-
       setTimeout(function() {
         console.log('after each: ' + res.id);
         done();
@@ -279,6 +276,11 @@ var resolveUrlAndTest = function(res) {
       expect(res).to.exist;
       expect(res).to.have.property('ref');
       expect(json_data).to.not.equal(null);
+    });
+
+    describe('test API response', function() {
+      // Handle JSON response from Handle API
+      handleAPIResponse(res.id, json_data);
     });
   });
 };
