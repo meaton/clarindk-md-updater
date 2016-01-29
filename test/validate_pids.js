@@ -183,12 +183,13 @@ var findInvalidPids = function(results) {
       });
     });
 
-    after(function() {
+    after(function(done) {
       _.each(records, function(val) {
         _.each(val, function(res) {
           resolveUrlAndTest(res);
         });
       });
+      done();
     });
   });
 };
@@ -277,7 +278,9 @@ var resolveUrlAndTest = function(res) {
 
       describe('check against the PID data properties', function() {
         describe('#parseRecord', function() {
-          handleAPIResponse(res.id, json_data);
+          context('when has body response', function() {
+            handleAPIResponse(res.id, json_data);
+          });
         });
       });
     });
