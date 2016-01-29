@@ -142,7 +142,8 @@ var parseQuery = function(queryResult, callback) {
       expect(queryResult).to.exist;
       queryResult.should.have.property('result_collection');
       //assert.lengthOf(queryResult.result_collection, config.expectedQuerySize);
-
+    });
+    after(function() {
       findInvalidPids(queryResult.result_collection);
     });
   });
@@ -175,6 +176,7 @@ var findInvalidPids = function(results) {
       _.each(records, function(val) {
         _.each(val, function(res) {
           console.log('logged val: ' + res.id);
+          resolveUrlAndTest(res);
         });
       });
     });
@@ -190,14 +192,22 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(res) {
   describe('validate resources ref ' + res.id + ' and resolve PID', function() {
-    var body = null;
+    var json = null;
 
     before(function(done) {
       //this.timeout(5000);
 
       // Handle.net API
-      var pidUrl = res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/');
+      var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/') : null;
+
+      /* // REST PID Manager url
+        var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
+        var hrTime = process.hrtime();
+        var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+      */
+
       var options = {
+        //method: 'GET',
         url: pidUrl,
         //url: pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,  // ref.id pass to request, timestamp milliseconds prevent cached request
         /*auth: {
@@ -211,53 +221,53 @@ var resolveUrlAndTest = function(res) {
       };
 
       request(options, function(err, resp, body) {
-        if(err) throw err;
+        if(err)
+          return done(err);
+
         console.log('resp: ' + resp.statusCode);
-        this.body = body;
+
+        json = body;
+
         done();
       });
-        /*.then(function(body) {
-          //console.log('received body: ', JSON.stringify(body));
-          //console.log('status:', resp.statusCode);
-          //var refID = querystring.parse(resp.request.uri.query).ref;
-          //console.log('req url:', resp.request.uri.href);
-          //console.log('ref from querystring: ' + refID);
 
-          body = body;
-          console.log('processing ', ref.id);
+      /* // request-promise
+      var req = rp(options).then(function(body) {
+        //console.log('received body: ', JSON.stringify(body));
+        //console.log('status:', resp.statusCode);
 
-          /* // Handle XML response from REST PID Manager
-          var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
-          var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-          .filter(function(val) {
-            return (val.textContent.indexOf('http') > -1); // url value
-          }).pluck('textContent').value();
-          var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-          .filter(function(val) {
-            return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
-          }).pluck('textContent').value();
-          */
+        //var refID = querystring.parse(resp.request.uri.query).ref;
+        //console.log('req url:', resp.request.uri.href);
+        //console.log('ref from querystring: ' + refID);
 
-          // Handle JSON response from Handle API
-          //handleAPIResponse(refID, body);
-        /*})
-        .catch(function(err) {
-          console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', ref.id, ' record: ', record.dkclarinID);
-        });*/
-        //req.should.be.fulfilled.notify(done);
+        json = body;
+
+        console.log('processing ', ref.id);
+
+        // Handle XML response from REST PID Manager
+        var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
+        var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+        .filter(function(val) {
+          return (val.textContent.indexOf('http') > -1); // url value
+        }).pluck('textContent').value();
+        var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+        .filter(function(val) {
+          return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
+        }).pluck('textContent').value();
+
+        // Handle JSON response from Handle API
+        handleAPIResponse(refID, body);
+      })
+      .catch(function(err) {
+        console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', ref.id, ' record: ', record.dkclarinID);
+      });
+      req.should.be.fulfilled.notify(done);
+      */
     });
 
     it('should have a valid PID value ' + res.id, function() {
-      expect(ref).to.exist;
-      expect(ref).to.have.deep.property('ResourceRef.$t');
-
-      //describe('resolve testing', function() {
-      //it('should resolve', function() {
-      // REST PID Manager url
-      /* var pidUrl = ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
-        var hrTime = process.hrtime();
-        var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
-      */
+      expect(res).to.exist;
+      expect(res.to.have.property('ref'));
     });
 
     after(function() {
@@ -336,6 +346,7 @@ describe('test the Session connection', function() {
         if (!err)
           openSession(res, function() {
             expect(session).not.equal(null);
+
             done();
 
             findQuery();
