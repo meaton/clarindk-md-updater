@@ -215,18 +215,9 @@ var resolveUrlAndTest = function(res) {
             'password': config.pidmanager_auth_pass
           }
         }
-      }*/
+      }
 
-      var api_options = {
-        method: 'GET',
-        url: pidUrl,
-        headers: {
-          'Cache-Control': 'no-cache'
-        },
-        json: true
-      };
-
-      /*request(api_options, function(err, resp, body) {
+      request(api_options, function(err, resp, body) {
         //console.log('received body: ', JSON.stringify(body));
         //console.log('status:', resp.statusCode);
         //var refID = querystring.parse(resp.request.uri.query).ref;
@@ -240,6 +231,15 @@ var resolveUrlAndTest = function(res) {
 
         done();
       });*/
+
+      var api_options = {
+        method: 'GET',
+        url: pidUrl,
+        headers: {
+          'Cache-Control': 'no-cache'
+        },
+        json: true
+      };
 
       // request-promise
       var req = rp(api_options).then(function(body) {
@@ -298,11 +298,10 @@ var handleAPIResponse = function(refID, body, done) {
     var valUrl = url.parse(pidRef);
 
     var isContentRef = (refID.indexOf('_') == 0);
-    refID = refID.substr(refID.indexOf('_') + 1);
+    var _id = refID.substr(refID.indexOf('_') + 1);
 
-    var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == refID);
-    console.log('refMatch:' + refMatch, ' path: ' + options.uri, ' ref ID: ' + refID, ' url: ' + valUrl.pathname);
-
+    var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
+    console.log('refMatch:' + refMatch, ' path: ' + options.uri, ' id: ' + _id, ' url: ' + valUrl.pathname);
     expect(refMatch).to.be.true;
 
     if (isContentRef) {
@@ -315,17 +314,18 @@ var handleAPIResponse = function(refID, body, done) {
         expect(checksum).to.exist;
         expect(/^[0-9a-f]{32}$/.test(checksum)).to.be.true;
 
-        if (checksum != null && checksum.length > 0 && /^[0-9a-f]{32}$/.test(checksum))
-          if (callback)
+        /*if (checksum != null && checksum.length > 0 && /^[0-9a-f]{32}$/.test(checksum))
+          if(callback)
             callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "content", checksum);
           else
             console.error('err: Illegal or missing checksum value pid: ', refID);
-
+          */
         done();
       });
     } else if (!refMatch) {
-      if (callback)
+      /*if (callback)
         callback(ref['ResourceRef']['$t'].replace('hdl:' + config.pidmanager_prefix + '/', ''), "dkclarin:" + refID, val.substr(0, val.lastIndexOf('/') + 1) + refID, "lp");
+      */
 
       // landing page ref mismatch
       console.error('err: LP ref does not match id ', refID);
