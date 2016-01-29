@@ -256,7 +256,12 @@ var resolveUrlAndTest = function(res) {
         }).pluck('textContent').value();
         */
       })
-      .then(function() { done(); })
+      .then(function() {
+        done();
+
+        // Handle JSON response from Handle API
+        handleAPIResponse(res.id, json_data);
+      })
       .catch(function(err) {
         done(err);
         console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
@@ -271,8 +276,7 @@ var resolveUrlAndTest = function(res) {
 
     after(function() {
       setTimeout(function() {
-        // Handle JSON response from Handle API
-        handleAPIResponse(res.id, json_data);
+        console.log('after');
        },
       100);
     });
