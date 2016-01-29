@@ -275,7 +275,7 @@ var resolveUrlAndTest = function(res) {
       });
     });
 
-    after(handleAPIResponse, 100, json_data);
+    after(_.bind(handleAPIResponse, this, json_data));
   });
 };
 
