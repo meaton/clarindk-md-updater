@@ -275,7 +275,10 @@ var resolveUrlAndTest = function(res) {
       });
     });
 
-    after(_.bind(handleAPIResponse, this, json_data));
+    after(function(done) {
+      handleAPIResponse(json_data)
+      done();
+    });
   });
 };
 
