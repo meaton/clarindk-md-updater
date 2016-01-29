@@ -184,7 +184,7 @@ var findInvalidPids = function(results) {
   });
 };
 
-var resolveUrlAndTest = function(ref) {
+var resolveUrlAndTest = function(callback, ref) {
   describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
     var body = null;
     beforeEach(function(done) {
@@ -242,7 +242,7 @@ var resolveUrlAndTest = function(ref) {
         //req.should.be.fulfilled.notify(done);
     });
 
-    it('should have a valid PID value ' + ref.id, function(done) {
+    it('should have a valid PID value ' + ref.id, function() {
       expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
 
@@ -253,8 +253,13 @@ var resolveUrlAndTest = function(ref) {
         var hrTime = process.hrtime();
         var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
       */
-      done();
     });
+  });
+
+  after(function() {
+    setTimeout(function() {
+      callback(null); },
+    100);
   });
 };
 
