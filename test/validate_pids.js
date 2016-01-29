@@ -280,7 +280,9 @@ var resolveUrlAndTest = function(res) {
       describe('check against the PID data properties', function() {
         describe('#parseRecord', function() {
           context('when has body response', function() {
-            handleAPIResponse(res.id, json_data);
+            it('should be a valid response', function() {
+              handleAPIResponse(res.id, json_data, done);
+            });
           });
         });
       });
