@@ -156,7 +156,7 @@ var findInvalidPids = function(results) {
       async.map(results, function(record, callback) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
-            callback(null,  pidVal);
+            callback(null,  { id: pidVal.id, ref: pidVal['ResourceRef']['$t'] } );
           });
       },
       function(err, results) {
@@ -172,7 +172,7 @@ var findInvalidPids = function(results) {
 
     after(function() {
       _.each(records, function(val) {
-        console.log('logged val: ' + val);
+        console.log('logged val: ' + val.id);
       });
     });
 
@@ -186,14 +186,14 @@ var findInvalidPids = function(results) {
   });
 };
 
-var resolveUrlAndTest = function(ref) {
-  describe('validate resources ref ' + ref.id + ' and resolve PID', function() {
+var resolveUrlAndTest = function(res) {
+  describe('validate resources ref ' + res.id + ' and resolve PID', function() {
     var body = null;
     beforeEach(function(done) {
       //this.timeout(5000);
 
       // Handle.net API
-      var pidUrl = ref['ResourceRef']['$t'].replace('hdl:', 'http://hdl.handle.net/api/handles/');
+      var pidUrl = res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/');
       var options = {
         url: pidUrl,
         //url: pidUrl + '/url?ref=' + ref.id + '&token=' + timestamp,  // ref.id pass to request, timestamp milliseconds prevent cached request
@@ -244,7 +244,7 @@ var resolveUrlAndTest = function(ref) {
         //req.should.be.fulfilled.notify(done);
     });
 
-    it('should have a valid PID value ' + ref.id, function() {
+    it('should have a valid PID value ' + res.id, function() {
       expect(ref).to.exist;
       expect(ref).to.have.deep.property('ResourceRef.$t');
 
