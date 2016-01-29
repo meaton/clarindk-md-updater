@@ -264,14 +264,14 @@ var resolveUrlAndTest = function(res) {
       });
     });
 
-    afterEach(function(done) {
+    after(function(done) {
       setTimeout(function() {
         console.log('after each: ' + res.id);
-        done();
         // Handle JSON response from Handle API
         handleAPIResponse(res.id, json_data);
        },
       100);
+      done();
     });
 
     it('should have a valid PID value ' + res.id, function() {
