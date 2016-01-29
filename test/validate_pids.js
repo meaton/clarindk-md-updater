@@ -177,21 +177,19 @@ var findInvalidPids = function(results) {
       expect(records).to.not.be.empty;
     });
 
+    it('should return more than 1 PID references for each resource', function() {
+      _.each(records, function(pidVal) {
+        expect(pidVal).to.have.length.above(1);
+      });
+    });
+
     after(function() {
       _.each(records, function(val) {
         _.each(val, function(res) {
-          console.log('logged val: ' + res.id);
           resolveUrlAndTest(res);
         });
       });
     });
-
-    //console.log('record: ' + require('prettyjson').render(JSON.parse(record.data)));
-    /*it('should return more than 1 PID references', function() {
-        expect(pidVal).to.have.length.above(1);
-        //_.each(pidVal, resolveUrlAndTest);
-      });
-    });*/
   });
 };
 
@@ -229,6 +227,10 @@ var resolveUrlAndTest = function(res) {
       };
 
       /*request(api_options, function(err, resp, body) {
+        //console.log('received body: ', JSON.stringify(body));
+        //console.log('status:', resp.statusCode);
+        //var refID = querystring.parse(resp.request.uri.query).ref;
+
         if(err)
           return done(err);
 
@@ -241,13 +243,7 @@ var resolveUrlAndTest = function(res) {
 
       // request-promise
       var req = rp(api_options).then(function(body) {
-          //console.log('received body: ', JSON.stringify(body));
-          //console.log('status:', resp.statusCode);
-          //var refID = querystring.parse(resp.request.uri.query).ref;
-
           json_data = body;
-
-          console.log('testing... ', res.id);
 
           // Handle XML response from REST PID Manager
           /*var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
