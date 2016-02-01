@@ -288,6 +288,9 @@ var resolveUrlAndTest = function(res) {
 };
 
 var handlePIDManagerResponse = function(refID, body, callback) {
+
+    console.log('handle PID Manager resp: ' + refID);
+
     // Handle XML response from REST PID Manager
     var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
 
