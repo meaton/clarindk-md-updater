@@ -265,9 +265,8 @@ var resolveUrlAndTest = function(res) {
     });
 
     describe('test API response', function() {
-      var data = xml_data;
-      it('should have a valid json response', function() {
-        expect(data).to.not.equal(null);
+      it('should have a valid response', function() {
+        expect(xml_data).to.not.equal(null);
       });
     });
 
@@ -275,11 +274,10 @@ var resolveUrlAndTest = function(res) {
       describe('#parseRecord', function() {
         context('when has body response', function() {
           it('should be a valid response', function(done) {
-            /*handleAPIResponse(res.id, json_data, function() {
-              done();
+            /*handleAPIResponse(res.id, json_data, function(err) {
+              done(err);
             });*/
-            var data = xml_data;
-            handlePIDManagerResponse(res.id, data, function(err) {
+            handlePIDManagerResponse(res.id, xml_data, function(err) {
               done(err);
             });
           });
@@ -308,7 +306,7 @@ var handlePIDManagerResponse = function(refID, body, callback) {
     var _id = refID.substr(refID.indexOf('_') + 1);
 
     var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
-    //console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
+    console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
 
     expect(pidRef).to.exist;
     expect(refMatch).to.be.true;
