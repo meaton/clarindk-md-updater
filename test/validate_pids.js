@@ -197,7 +197,7 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(res) {
   describe('validate resources ref ' + res.id + ' and resolve PID', function() {
-    var json_data = null;
+    var json_data = null, xml_data = null;
 
     before(function(done) {
       this.timeout(10000);
@@ -228,7 +228,7 @@ var resolveUrlAndTest = function(res) {
         console.log('resp: ' + resp.statusCode);
         console.log('refID: ' + refID);
 
-        json = body;
+        xml_data = body;
 
         done();
       });
@@ -265,8 +265,9 @@ var resolveUrlAndTest = function(res) {
     });
 
     describe('test API response', function() {
+      var data = xml_data;
       it('should have a valid json response', function() {
-        expect(json_data).to.not.equal(null);
+        expect(data).to.not.equal(null);
       });
     });
 
@@ -277,7 +278,8 @@ var resolveUrlAndTest = function(res) {
             /*handleAPIResponse(res.id, json_data, function() {
               done();
             });*/
-            handlePIDManagerResponse(res.id, json_data, function(err) {
+            var data = xml_data;
+            handlePIDManagerResponse(res.id, data, function(err) {
               done(err);
             });
           });
