@@ -213,17 +213,15 @@ var resolveUrlAndTest = function(res) {
         auth: {
           'user': config.pidmanager_auth_user,
           'password': config.pidmanager_auth_pass
-        }
+        },
+        resolveWithFullResponse: true
       };
 
-      request(pidManager_options, function(err, resp, body) {
-        console.log('received body: ', JSON.stringify(body));
+      rp(pidManager_options).then(function(resp) {
+        console.log('received body: ', JSON.stringify(resp.body));
         console.log('status:', resp.statusCode);
 
         var refID = querystring.parse(resp.request.uri.query).ref;
-
-        if(err)
-          return done(err);
 
         console.log('resp: ' + resp.statusCode);
         console.log('refID: ' + refID);
@@ -231,6 +229,9 @@ var resolveUrlAndTest = function(res) {
         xml_data = body;
 
         done();
+      }).catch(function(reason) {
+        console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
+        done(reason.cause);
       });
 
       /*
@@ -252,9 +253,9 @@ var resolveUrlAndTest = function(res) {
 
           done();
         })
-        .catch(function(err) {
-          done(err);
+        .catch(function(reason) {
           console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
+          done(reason.cause);
         });
         */
     });
