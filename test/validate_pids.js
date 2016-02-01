@@ -304,11 +304,15 @@ var handlePIDManagerResponse = function(refID, body, callback) {
       return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
     }).pluck('textContent').value();
 
+    console.log('pidRef: ', pidRef);
+    console.log('checksum: ', checksum);
+
     var valUrl = url.parse(pidRef);
     var isContentRef = (refID.indexOf('_') == 0);
     var _id = refID.substr(refID.indexOf('_') + 1);
 
     var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
+
     console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
 
     expect(pidRef).to.exist;
