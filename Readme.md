@@ -1,9 +1,9 @@
 ## CLARIN-DK MD-Updater
 
-A Node.js Flatiron-CLI application to retrieve and update [eSciDoc](http://www.escidoc.org) Metadata records (MD-Records) in [clarin.dk](http://www.clarin.dk). 
+A Node.js Flatiron-CLI application to retrieve and update [eSciDoc](http://www.escidoc.org) Metadata records (MD-Records) in [clarin.dk](http://www.clarin.dk).
 
 ####Requirements
-* [Node.js](http://nodejs.org/) & [NPM](http://npmjs.org/) 
+* [Node.js](http://nodejs.org/) & [NPM](http://npmjs.org/)
 * [eSciDoc Metadata-Updater](https://github.com/escidoc/escidoc-metadata-updater)
 * [MongoDB](http://www.mongodb.org/)
 * [eSciDoc](http://www.escidoc.org) (>=1.3.x)
@@ -37,15 +37,15 @@ Shows a table of all Query’s for a user’s Session (by current *escidoc_handl
 
 **inspect** *{query}*
 
-Inspects a valid Query. Shows a table of downloaded Items for the Query, and their statuses. Using --show-data option provides a prompt to view the current locally stored MD-record selected by item ID. 
+Inspects a valid Query. Shows a table of downloaded Items for the Query, and their statuses. Using --show-data option provides a prompt to view the current locally stored MD-record selected by item ID.
 
 **update** *{query} {change-file}*
 
-Updates the set of metadata records for the selected query from a users session, applying a modificatin to the offline records with defined change-rules (JSON format). These changes can be reviewed with using the *inspect* command (with *--show-data* parameter) before upload and submission. All records that are successfully modified from their original are flagged. 
+Updates the set of metadata records for the selected query from a users session, applying a modificatin to the offline records with defined change-rules (JSON format). These changes can be reviewed with using the *inspect* command (with *--show-data* parameter) before upload and submission. All records that are successfully modified from their original are flagged.
 
 **submit** *{query} {comment}*
 
-Modified results from a selected query are uploaded to eSciDoc via the eSciDoc metadata-updater service, submitted and released in a completed operation. 
+Modified results from a selected query are uploaded to eSciDoc via the eSciDoc metadata-updater service, submitted and released in a completed operation.
 Once submission is completed the query is marked as closed. Comment is required.
 
 **addUser** *{escidoc_handle}*
@@ -60,13 +60,22 @@ Removes existing Query record and associated metadata records from the session.
 
 ###Deploying eSciDoc Metadata-Updater
 
-An RESTful updater service to eSciDoc. Additionally provides the service of retrieving metadata records for an item, in XML-format output. The XML can be edited and an updated document can be uploaded to eSciDoc via the service. Handles the authentication process with either eSciDoc handle cookie or Basic auth login method. 
-   
+An RESTful updater service to eSciDoc. Additionally provides the service of retrieving metadata records for an item, in XML-format output. The XML can be edited and an updated document can be uploaded to eSciDoc via the service. Handles the authentication process with either eSciDoc handle cookie or Basic auth login method.
+
 See https://github.com/escidoc/escidoc-metadata-updater for further details.
 
-Deploy as locally running Jetty service or as a deployed WAR. 
+Deploy as locally running Jetty service or as a deployed WAR.
 
 Set CLI configuration appropriately, updaterHost and updaterPort parameters for the deployed MD-Updater service.
+
+###Testing
+
+#####Validating PIDs from fetched CMDI metadata records
+
+Set 'targetQuery' in the config file to be the Query id of the fetched CMDI metadata records, together with the correct Session (linked by 'escidoc_handle'). Test will run on PIDs found in the Resources section of a CMDI metadata resource, resolve and validate the data fields. Tests currently created using [mocha] (https://mochajs.org/) (test runner) and [chai] (http://chaijs.com/) assertions.
+
+Running the tests:
+``npm test``
 
 - - -
 
@@ -127,16 +136,16 @@ Add a new Metadata element to the record, including defined attributes and text 
 Match and replace a string from the selected value and replace the first match found with the new value. Regular Expressions may be used also, and for global replacement.
 
 >``
-[{ 
+[{
   "change_type":"replace",
   "field_position":{
      "olac:olac":"dc:contributor"
   },
   "conditions": {
-     "olac:code": "sponsor", 
-     "$match": "DK-CLARIN" 
-  }, 
-  "selector": "$t", 
+     "olac:code": "sponsor",
+     "$match": "DK-CLARIN"
+  },
+  "selector": "$t",
   "set_value": "cst.ku.dk"
 }]
 ``
