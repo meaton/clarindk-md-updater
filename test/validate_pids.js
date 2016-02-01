@@ -203,7 +203,7 @@ var resolveUrlAndTest = function(res) {
       this.timeout(10000);
 
       // REST PID Manager url
-      var pidUrl = (res.ref != undefined ? res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path) : null;
+      var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path) : null;
       var hrTime = process.hrtime();
       var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
 
