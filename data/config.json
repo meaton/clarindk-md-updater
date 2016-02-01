@@ -11,9 +11,12 @@
   "colors": true,
   "useBatch": false,
   "batchLimit": "10",
+  "pidResolveService": "pidmanager",
   "pidmanager_host": "devtools.clarin.dk",
   "pidmanager_path": "/pidmanager/pid/handle/",
   "pidmanager_auth_user": "clarindk",
   "pidmanager_auth_pass": "password",
-  "pidmanager_prefix": "11221"
+  "pidmanager_prefix": "11221",
+  "handle_api_host": "hdl.handle.net",
+  "handle_api_path": "/api/handles/"
 }

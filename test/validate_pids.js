@@ -197,63 +197,64 @@ var findInvalidPids = function(results) {
 
 var resolveUrlAndTest = function(res) {
   describe('validate resources ref ' + res.id + ' and resolve PID', function() {
-    var json_data = null, xml_data = null;
+    var data = null;
 
     before(function(done) {
-      this.timeout(10000);
+      this.timeout(10000); //TODO: remain issues with timeout for reqs against hdl.handle.net
+      var pidUrl, options;
 
-      // REST PID Manager url
-      var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path) : null;
-      var hrTime = process.hrtime();
-      var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+      if(config.pidResolveService == "pidmanager") { // REST PID Manager url
+        pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path) : null;
 
-      var pidManager_options = {
-        method: 'GET',
-        url: pidUrl + '/url?ref=' + res.id + '&token=' + timestamp,  // res.id pass to request, timestamp milliseconds prevent cached request
-        auth: {
-          'user': config.pidmanager_auth_user,
-          'password': config.pidmanager_auth_pass
-        },
-        resolveWithFullResponse: true
-      };
+        var hrTime = process.hrtime();
+        var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
 
-      rp(pidManager_options).then(function(resp) {
-        console.log('received body: ', JSON.stringify(resp.body));
-        console.log('status:', resp.statusCode);
+        options = {
+          method: 'GET',
+          url: pidUrl + '/url?ref=' + res.id + '&token=' + timestamp,  // res.id pass to request, timestamp milliseconds prevent cached request
+          auth: {
+            'user': config.pidmanager_auth_user,
+            'password': config.pidmanager_auth_pass
+          },
+          resolveWithFullResponse: true
+        };
 
-        var refID = querystring.parse(resp.request.uri.query).ref;
-        console.log('refID: ' + refID);
+        //request-promise
+        rp(options).then(function(resp) {
+          console.log('received body: ', JSON.stringify(resp.body));
+          console.log('status:', resp.statusCode);
 
-        xml_data = resp.body;
+          var refID = querystring.parse(resp.request.uri.query).ref;
+          console.log('refID: ' + refID);
 
-        done();
-      }).catch(function(reason) {
-        done(reason.cause);
-      });
-
-      /*
-      // Handle.net API
-      var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/') : null;
-
-      var api_options = {
-        method: 'GET',
-        url: pidUrl,
-        headers: {
-          'Cache-Control': 'no-cache'
-        },
-        json: true
-      };
-
-      // request-promise
-      var req = rp(api_options).then(function(body) {
-          json_data = body;
-
+          data = resp.body;
           done();
-        })
-        .catch(function(reason) {
+        }).catch(function(reason) {
           done(reason.cause);
         });
-        */
+      } else if(config.pidResolveService == "handle") {
+        // Handle.net API
+        pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://' + config.handle_api_host + config.handle_api_path) : null;
+        options = {
+          method: 'GET',
+          url: pidUrl,
+          headers: {
+            'Cache-Control': 'no-cache'
+          },
+          json: true
+        };
+
+        // request-promise
+        var req = rp(options).then(function(body) {
+            data = body;
+            done();
+          })
+          .catch(function(reason) {
+            done(reason.cause);
+          });
+      } else {
+        done(new Error('unsupported PID service'));
+      }
     });
 
     it('should have a valid PID value ' + res.id, function() {
@@ -263,7 +264,7 @@ var resolveUrlAndTest = function(res) {
 
     describe('test API response', function() {
       it('should have a valid response', function() {
-        expect(xml_data).to.not.equal(null);
+        expect(data).to.not.equal(null);
       });
     });
 
@@ -271,12 +272,14 @@ var resolveUrlAndTest = function(res) {
       describe('#parseRecord', function() {
         context('when has body response', function() {
           it('should be a valid response', function(done) {
-            /*handleAPIResponse(res.id, json_data, function(err) {
-              done(err);
-            });*/
-            handlePIDManagerResponse(res.id, xml_data, function(err) {
-              done(err);
-            });
+            if(config.pidResolveService == "pidmanager")
+              handleAPIResponse(res.id, json_data, function(err) {
+                done(err);
+              });
+            else if(config.pidResolveService == "handle")
+              handlePIDManagerResponse(res.id, data, function(err) {
+                done(err);
+              });
           });
         });
       });
@@ -285,9 +288,7 @@ var resolveUrlAndTest = function(res) {
 };
 
 var handlePIDManagerResponse = function(refID, body, callback) {
-
-    console.log('handle PID Manager resp: ' + refID);
-
+    //console.log('handle PID Manager resp: ' + refID);
     // Handle XML response from REST PID Manager
     var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
 
@@ -301,8 +302,8 @@ var handlePIDManagerResponse = function(refID, body, callback) {
       return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
     }).pluck('textContent').value();
 
-    console.log('pidRef: ', pidRef);
-    console.log('checksum: ', checksum);
+    //console.log('pidRef: ', pidRef);
+    //console.log('checksum: ', checksum);
 
     if(pidRef.length == 1) {
       var valUrl = url.parse(pidRef[0]);
@@ -310,7 +311,7 @@ var handlePIDManagerResponse = function(refID, body, callback) {
       var _id = refID.substr(refID.indexOf('_') + 1);
       var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
 
-      console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
+      //console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
     }
 
     expect(pidRef).to.have.length.of.at.least(1);
@@ -333,7 +334,6 @@ var handlePIDManagerResponse = function(refID, body, callback) {
 var handleAPIResponse = function(refID, body, callback) {
   //console.log('handle API resp: ' + refID);
   //console.log('handle responseCode: ' + body.responseCode);
-
   parseRecord(body, '$.values[?(@.type === "URL")].data.value', function(pidRef) {
     //console.log('url prop:', pidRef);
     var valUrl = url.parse(pidRef);
@@ -395,9 +395,7 @@ describe('test the Session connection', function() {
         if (!err)
           openSession(res, function() {
             expect(session).not.equal(null);
-
             done();
-
             findQuery();
           });
         else
