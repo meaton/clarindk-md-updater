@@ -221,11 +221,11 @@ var resolveUrlAndTest = function(res) {
 
         //request-promise
         rp(options).then(function(resp) {
-          console.log('received body: ', JSON.stringify(resp.body));
-          console.log('status:', resp.statusCode);
+          //console.log('received body: ', JSON.stringify(resp.body));
+          //console.log('status:', resp.statusCode);
 
           var refID = querystring.parse(resp.request.uri.query).ref;
-          console.log('refID: ' + refID);
+          //console.log('refID: ' + refID);
 
           data = resp.body;
           done();
