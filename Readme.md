@@ -72,7 +72,7 @@ Set CLI configuration appropriately, updaterHost and updaterPort parameters for 
 
 #####Validating PIDs from fetched CMDI metadata records
 
-Set 'targetQuery' in the config file to be the Query id of the fetched CMDI metadata records, together with the correct Session (linked by 'escidoc_handle'). Test will run on PIDs found in the Resources section of a CMDI metadata resource, resolve and validate the data fields. Tests currently created using [mocha] (https://mochajs.org/) (test runner) and [chai] (http://chaijs.com/) assertions.
+Set 'targetQuery' in the config file to be the Query id of the fetched CMDI metadata records, together with the correct Session (linked by 'escidoc_handle'). Tests will run against PIDs found in the Resources section of a CMDI metadata resource, resolve and validate the data fields. Tests currently created using [mocha] (https://mochajs.org/) and [chai] (http://chaijs.com/) assertions.
 
 Running the tests:
 ``npm test``
