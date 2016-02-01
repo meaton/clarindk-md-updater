@@ -203,7 +203,7 @@ var resolveUrlAndTest = function(res) {
       this.timeout(10000);
 
       // REST PID Manager url
-      var pidUrl = res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
+      var pidUrl = (res.ref != undefined ? res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path) : null;
       var hrTime = process.hrtime();
       var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
 
@@ -216,7 +216,7 @@ var resolveUrlAndTest = function(res) {
         }
       };
 
-      request(api_options, function(err, resp, body) {
+      request(pidManager_options, function(err, resp, body) {
         console.log('received body: ', JSON.stringify(body));
         console.log('status:', resp.statusCode);
 
