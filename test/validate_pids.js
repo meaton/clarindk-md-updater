@@ -230,7 +230,6 @@ var resolveUrlAndTest = function(res) {
 
         done();
       }).catch(function(reason) {
-        console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
         done(reason.cause);
       });
 
@@ -254,7 +253,6 @@ var resolveUrlAndTest = function(res) {
           done();
         })
         .catch(function(reason) {
-          console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
           done(reason.cause);
         });
         */
