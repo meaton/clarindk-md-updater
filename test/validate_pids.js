@@ -202,37 +202,40 @@ var resolveUrlAndTest = function(res) {
     before(function(done) {
       this.timeout(10000);
 
-      // Handle.net API
-      var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/') : null;
+      // REST PID Manager url
+      var pidUrl = res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
+      var hrTime = process.hrtime();
+      var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
 
-      /* // REST PID Manager url
-        var pidUrl = res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path);
-        var hrTime = process.hrtime();
-        var timestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
-        var pidManager_options = {
-          //method: 'GET',
-          //url: pidUrl + '/url?ref=' + res.id + '&token=' + timestamp,  // res.id pass to request, timestamp milliseconds prevent cached request
-          /*auth: {
-            'user': config.pidmanager_auth_user,
-            'password': config.pidmanager_auth_pass
-          }
+      var pidManager_options = {
+        method: 'GET',
+        url: pidUrl + '/url?ref=' + res.id + '&token=' + timestamp,  // res.id pass to request, timestamp milliseconds prevent cached request
+        auth: {
+          'user': config.pidmanager_auth_user,
+          'password': config.pidmanager_auth_pass
         }
-      }
+      };
 
       request(api_options, function(err, resp, body) {
-        //console.log('received body: ', JSON.stringify(body));
-        //console.log('status:', resp.statusCode);
-        //var refID = querystring.parse(resp.request.uri.query).ref;
+        console.log('received body: ', JSON.stringify(body));
+        console.log('status:', resp.statusCode);
+
+        var refID = querystring.parse(resp.request.uri.query).ref;
 
         if(err)
           return done(err);
 
         console.log('resp: ' + resp.statusCode);
+        console.log('refID: ' + refID);
 
         json = body;
 
         done();
-      });*/
+      });
+
+      /*
+      // Handle.net API
+      var pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://hdl.handle.net/api/handles/') : null;
 
       var api_options = {
         method: 'GET',
@@ -247,24 +250,13 @@ var resolveUrlAndTest = function(res) {
       var req = rp(api_options).then(function(body) {
           json_data = body;
 
-          // Handle XML response from REST PID Manager
-          /*var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
-          var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-          .filter(function(val) {
-            return (val.textContent.indexOf('http') > -1); // url value
-          }).pluck('textContent').value();
-          var md5checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
-          .filter(function(val) {
-            return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
-          }).pluck('textContent').value();
-          */
-
           done();
         })
         .catch(function(err) {
           done(err);
           console.error('error: Error occurred resolving PID ', pidUrl, ' ref ID: ', res.id, ' record: ', record.dkclarinID);
         });
+        */
     });
 
     it('should have a valid PID value ' + res.id, function() {
@@ -282,14 +274,55 @@ var resolveUrlAndTest = function(res) {
       describe('#parseRecord', function() {
         context('when has body response', function() {
           it('should be a valid response', function(done) {
-            handleAPIResponse(res.id, json_data, function() {
+            /*handleAPIResponse(res.id, json_data, function() {
               done();
+            });*/
+            handlePIDManagerResponse(res.id, json_data, function(err) {
+              done(err);
             });
           });
         });
       });
     });
   });
+};
+
+var handlePIDManagerResponse = function(refID, body, callback) {
+    // Handle XML response from REST PID Manager
+    var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
+
+    var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+    .filter(function(val) {
+      return (val.textContent.indexOf('http') > -1); // url value
+    }).pluck('textContent').value();
+
+    var checksum = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
+    .filter(function(val) {
+      return /^[0-9a-f]{32}$/.test(val.textContent); // md5 regexp test
+    }).pluck('textContent').value();
+
+    var valUrl = url.parse(pidRef);
+    var isContentRef = (refID.indexOf('_') == 0);
+    var _id = refID.substr(refID.indexOf('_') + 1);
+
+    var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
+    //console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
+
+    expect(pidRef).to.exist;
+    expect(refMatch).to.be.true;
+
+    if(isContentRef) {
+      expect(checksum).to.exist;
+      expect(checksum).to.match(/^[0-9a-f]{32}$/);
+
+      if(callback) callback();
+    }  else if (!refMatch) {
+      // landing page ref mismatch
+      //console.error('err: LP ref does not match id ', refID);
+      if(callback) callback(new Error('err: LP ref does not match id ' + refID));
+    } else {
+      if(callback) callback();
+    }
 };
 
 var handleAPIResponse = function(refID, body, callback) {
@@ -324,7 +357,7 @@ var handleAPIResponse = function(refID, body, callback) {
           else
             console.error('err: Illegal or missing checksum value pid: ', refID);
           */
-        callback();
+        if(callback) callback();
       });
     } else if (!refMatch) {
       /*if (callback)
@@ -332,9 +365,10 @@ var handleAPIResponse = function(refID, body, callback) {
       */
 
       // landing page ref mismatch
-      console.error('err: LP ref does not match id ', refID);
+      //console.error('err: LP ref does not match id ', refID);
+      if(callback) callback(new Error('err: LP ref does not match id ' + refID));
     } else {
-      callback();
+      if(callback) callback();
     }
   });
 };
