@@ -222,11 +222,9 @@ var resolveUrlAndTest = function(res) {
         console.log('status:', resp.statusCode);
 
         var refID = querystring.parse(resp.request.uri.query).ref;
-
-        console.log('resp: ' + resp.statusCode);
         console.log('refID: ' + refID);
 
-        xml_data = body;
+        xml_data = resp.body;
 
         done();
       }).catch(function(reason) {
