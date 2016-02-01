@@ -273,11 +273,11 @@ var resolveUrlAndTest = function(res) {
         context('when has body response', function() {
           it('should be a valid response', function(done) {
             if(config.pidResolveService == "pidmanager")
-              handleAPIResponse(res.id, json_data, function(err) {
+              handlePIDManagerResponse(res.id, data, function(err) {
                 done(err);
               });
             else if(config.pidResolveService == "handle")
-              handlePIDManagerResponse(res.id, data, function(err) {
+              handleAPIResponse(res.id, data, function(err) {
                 done(err);
               });
           });
