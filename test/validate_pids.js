@@ -307,20 +307,21 @@ var handlePIDManagerResponse = function(refID, body, callback) {
     console.log('pidRef: ', pidRef);
     console.log('checksum: ', checksum);
 
-    var valUrl = url.parse(pidRef);
-    var isContentRef = (refID.indexOf('_') == 0);
-    var _id = refID.substr(refID.indexOf('_') + 1);
+    if(pidRef.length == 1) {
+      var valUrl = url.parse(pidRef[0]);
+      var isContentRef = (refID.indexOf('_') == 0);
+      var _id = refID.substr(refID.indexOf('_') + 1);
+      var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
 
-    var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
+      console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
+    }
 
-    console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
-
-    expect(pidRef).to.exist;
+    expect(pidRef).to.have.length.of.at.least(1);
     expect(refMatch).to.be.true;
 
     if(isContentRef) {
-      expect(checksum).to.exist;
-      expect(checksum).to.match(/^[0-9a-f]{32}$/);
+      expect(checksum).to.have.length.of.at.least(1);
+      expect(checksum[0]).to.match(/^[0-9a-f]{32}$/);
 
       if(callback) callback();
     }  else if (!refMatch) {
