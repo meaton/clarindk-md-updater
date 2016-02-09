@@ -161,17 +161,18 @@ var findInvalidPids = function(results) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
             pidVal = _.map(pidVal, function(val) {
-              if(val.id.indexOf('lp') == 0) selfLinkHdl = { id: val.id, ref: val['ResourceRef']['$t'] + '@md=cmdi' };
+              if(val.id.indexOf('lp') == 0)
+                selfLinkHdl = { id: val.id, ref: val['ResourceRef']['$t'] + '@md=cmdi' };
               return {
                 id: val.id,
                 ref: val['ResourceRef']['$t']
               }
             });
+            if(selfLinkHdl != null) pidVal.push(selfLinkHdl);
             callback(null, pidVal);
           });
         },
         function(err, results) {
-          if(selfLinkHdl != null) results.push(selfLinkHdl);
           records = results;
           done();
         });
@@ -276,6 +277,7 @@ var resolveUrlAndTest = function(res) {
       describe('#parseRecord', function() {
         context('when has body response', function() {
           it.only('should be a valid response', function(done) {
+            this.timeout(10000);
             if(config.pidResolveService == "pidmanager")
               handlePIDManagerResponse(res.id, data, function(err) {
                 done(err);
