@@ -253,13 +253,14 @@ var resolveUrlAndTest = function(res) {
         };
 
         // request-promise
-        var req = rp(options).then(function(body) {
-            data = body;
-            done();
-          })
-          .catch(function(reason) {
-            done(reason.cause);
-          });
+        if(pidUrl.indexOf('@md=cmdi') != -1) // self links
+          var req = rp(options).then(function(body) {
+              data = body;
+              done();
+            })
+            .catch(function(reason) {
+              done(reason.cause);
+            });
       } else {
         done(new Error('unsupported PID service'));
       }
