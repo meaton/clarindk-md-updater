@@ -168,7 +168,10 @@ var findInvalidPids = function(results) {
                 ref: val['ResourceRef']['$t']
               }
             });
-            if(selfLinkHdl != null) pidVal.push(selfLinkHdl);
+            if(selfLinkHdl != null) {
+              console.log('selfLinkHdl: ' + selfLinkHdl.ref);
+              pidVal.push(selfLinkHdl);
+            }
             callback(null, pidVal);
           });
         },
@@ -208,7 +211,7 @@ var resolveUrlAndTest = function(res) {
       this.timeout(10000); //TODO: remain issues with timeout for reqs against hdl.handle.net
       var pidUrl, options;
 
-      if(config.pidResolveService == "pidmanager" && res.ref != undefined && res.ref.indexOf('@md=cmdi') == -1) { // REST PID Manager url
+      if(config.pidResolveService == "pidmanager") { // REST PID Manager url
         pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:' + config.pidmanager_prefix + '/', 'https://' + config.pidmanager_host + config.pidmanager_path) : null;
 
         var hrTime = process.hrtime();
@@ -237,12 +240,12 @@ var resolveUrlAndTest = function(res) {
         }).catch(function(reason) {
           done(reason.cause);
         });
-      } else if(config.pidResolveService == "handle" || (res.ref != undefined && res.ref.indexOf('@md=cmdi') != -1)) {
+      } else if(config.pidResolveService == "handle") {
         // Handle.net API
         pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://' + config.handle_api_host + config.handle_api_path) : null;
         options = {
           method: 'GET',
-          url: pidUrl + '?auth',
+          url: pidUrl,
           headers: {
             'Cache-Control': 'no-cache'
           },
