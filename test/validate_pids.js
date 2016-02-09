@@ -59,7 +59,7 @@ var findQuery = function() {
   var queryId = config.targetQuery;
 
   describe('check query id', function() {
-    it('should match mongoDB id format', function() {
+    it.only('should match mongoDB id format', function() {
       var test = /^[0-9a-fA-F]{24}$/.test(queryId);
       //throw new Error("Query Id is invalid.");
       expect(test).to.be.true;
@@ -68,7 +68,7 @@ var findQuery = function() {
 
   describe('retrieve query results', function() {
     describe('#QueryModel.findById', function() {
-      it('should retreive query results without error', function(done) {
+      it.only('should retreive query results without error', function(done) {
         QueryModel.findById(queryId)
           .populate("result_collection")
           .populate({
@@ -138,11 +138,12 @@ var updateRecord = function(invalidPID, idRef, refUrl, type, checksum) {
 var parseQuery = function(queryResult, callback) {
   //console.log('result length: ' + queryResult.result_collection.length);
   describe('parse result collection', function() {
-    it('should contain some records', function() {
+    it.only('should contain some records', function() {
       expect(queryResult).to.exist;
       queryResult.should.have.property('result_collection');
       //assert.lengthOf(queryResult.result_collection, config.expectedQuerySize);
     });
+
     after(function(done) {
       findInvalidPids(queryResult.result_collection);
       done();
@@ -155,10 +156,12 @@ var findInvalidPids = function(results) {
     var records = null;
 
     before(function(done) {
+      var selfLinkHdl = null;
       async.map(results, function(record, callback) {
           var resourceProxyPath = "$.CMD.Resources..ResourceProxy"; //TODO: Validate against versionPID, selfLink
           parseRecord(JSON.parse(record.data), resourceProxyPath, function(pidVal) {
             pidVal = _.map(pidVal, function(val) {
+              if(val.id.indexOf('lp') == 0) selfLinkHdl = { id: val.id, ref: val['ResourceRef']['$t'] + '@md=cmdi' };
               return {
                 id: val.id,
                 ref: val['ResourceRef']['$t']
@@ -168,6 +171,7 @@ var findInvalidPids = function(results) {
           });
         },
         function(err, results) {
+          if(selfLinkHdl != null) results.push(selfLinkHdl);
           records = results;
           done();
         });
@@ -257,13 +261,13 @@ var resolveUrlAndTest = function(res) {
       }
     });
 
-    it('should have a valid PID value ' + res.id, function() {
+    it.only('should have a valid PID value ' + res.id, function() {
       expect(res).to.exist;
       expect(res).to.have.property('ref');
     });
 
     describe('test API response', function() {
-      it('should have a valid response', function() {
+      it.only('should have a valid response', function() {
         expect(data).to.not.equal(null);
       });
     });
@@ -271,7 +275,7 @@ var resolveUrlAndTest = function(res) {
     describe('check against the PID data properties', function() {
       describe('#parseRecord', function() {
         context('when has body response', function() {
-          it('should be a valid response', function(done) {
+          it.only('should be a valid response', function(done) {
             if(config.pidResolveService == "pidmanager")
               handlePIDManagerResponse(res.id, data, function(err) {
                 done(err);
@@ -309,9 +313,8 @@ var handlePIDManagerResponse = function(refID, body, callback) {
       var valUrl = url.parse(pidRef[0]);
       var isContentRef = (refID.indexOf('_') == 0);
       var _id = refID.substr(refID.indexOf('_') + 1);
-      var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
-
-      //console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
+      var refMatch = isRefMatch(_id, valUrl, isContentRef);
+      console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
     }
 
     expect(pidRef).to.have.length.of.at.least(1);
@@ -340,7 +343,7 @@ var handleAPIResponse = function(refID, body, callback) {
     var isContentRef = (refID.indexOf('_') == 0);
     var _id = refID.substr(refID.indexOf('_') + 1);
 
-    var refMatch = (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == _id);
+    var refMatch = isRefMatch(_id, valUrl, isContentRef);
     //console.log('refMatch:' + refMatch, ' path: ' + valUrl.href, ' id: ' + _id, ' url: ' + valUrl.pathname);
 
     expect(pidRef).to.exist;
@@ -376,6 +379,14 @@ var handleAPIResponse = function(refID, body, callback) {
       if(callback) callback();
     }
   });
+};
+
+var isRefMatch = function(id, valUrl, isContentRef) {
+  if(id != null && valUrl != null)
+    return (isContentRef && valUrl.pathname.indexOf('handle/cmdi') > -1)
+      ? (valUrl.search && valUrl.search.lastIndexOf('/') + 1 == id)
+      : (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == id);
+  else return false;
 };
 
 // parse records, iterate over resource proxies (pid refs)
