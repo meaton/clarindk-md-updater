@@ -386,7 +386,7 @@ var handleAPIResponse = function(refID, body, callback) {
 var isRefMatch = function(id, valUrl, isContentRef) {
   if(id != null && valUrl != null)
     return (isContentRef && valUrl.pathname.indexOf('handle/cmdi') > -1)
-      ? (valUrl.search && valUrl.search.lastIndexOf('/') + 1 == id)
+      ? (valUrl.search && valUrl.search.indexOf('http') == 0 && url.parse(valUrl.search).pathname.lastIndexOf('/') + 1 == id)
       : (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == id);
   else return false;
 };
