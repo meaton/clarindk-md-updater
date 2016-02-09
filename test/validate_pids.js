@@ -386,9 +386,10 @@ var handleAPIResponse = function(refID, body, callback) {
 var isRefMatch = function(id, valUrl, isContentRef) {
   if(id != null && valUrl != null)
     if(!isContentRef && valUrl.pathname == "/handle/cmdi") {
+      var searchPath = url.parse(valUrl.search.substr(1, valUrl.search.length)).pathname;
       console.log('search: ' + valUrl.search);
-      console.log('search parse: ' + url.parse(valUrl.search.substr(1, valUrl.search.length)).pathname)
-      return (valUrl.search && valUrl.search.indexOf('http') == 0 && url.parse(valUrl.search.substr(1, valUrl.search.length)).pathname.lastIndexOf('/') + 1 == id)
+      console.log('search parse: ' + searchPath);
+      return (valUrl.search && valUrl.search.indexOf('http') != -1 && searchPath.substr(searchPath.lastIndexOf('/') + 1) == id)
     } else
       return (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == id);
   else
