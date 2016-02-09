@@ -194,17 +194,21 @@ var findInvalidPids = function(results) {
 
     after(function(done) {
       _.each(records, function(val) {
-        _.each(val, function(res) {
-          if(res.ref != undefined && res.ref.indexOf('@md=cmdi') != -1) resolveUrlAndTest(res);
+        _.each(val, function(res) { // utilise tag @ reference and --grep option to control test workflow 
+          if(res.ref != undefined && res.ref.indexOf('@md=cmdi') != -1)
+            resolveUrlAndTest(res, '@resolve');
+          else
+            resolveUrlAndTest(res, '@validate');
         });
       });
+
       done();
     });
   });
 };
 
-var resolveUrlAndTest = function(res) {
-  describe('validate resources ref ' + res.id + ' and resolve PID ' + res.ref, function() {
+var resolveUrlAndTest = function(res, actionTag) {
+  describe('Verify resources ref ' + res.id + ' and ' + actionTag + ' PID ' + res.ref, function() {
     var data = null;
 
     before(function(done) {
