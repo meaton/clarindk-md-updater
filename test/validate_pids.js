@@ -195,7 +195,7 @@ var findInvalidPids = function(results) {
     after(function(done) {
       _.each(records, function(val) {
         _.each(val, function(res) {
-          resolveUrlAndTest(res);
+          if(res.ref != undefined && res.ref.indexOf('@md=cmdi') != -1) resolveUrlAndTest(res);
         });
       });
       done();
@@ -253,14 +253,13 @@ var resolveUrlAndTest = function(res) {
         };
 
         // request-promise
-        if(pidUrl.indexOf('@md=cmdi') != -1) // self links
-          var req = rp(options).then(function(body) {
-              data = body;
-              done();
-            })
-            .catch(function(reason) {
-              done(reason.cause);
-            });
+        var req = rp(options).then(function(body) {
+            data = body;
+            done();
+          })
+          .catch(function(reason) {
+            done(reason.cause);
+          });
       } else {
         done(new Error('unsupported PID service'));
       }
