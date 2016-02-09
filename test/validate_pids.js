@@ -201,7 +201,7 @@ var findInvalidPids = function(results) {
 };
 
 var resolveUrlAndTest = function(res) {
-  describe('validate resources ref ' + res.id + ' and resolve PID', function() {
+  describe('validate resources ref ' + res.id + ' and resolve PID ' + res.ref, function() {
     var data = null;
 
     before(function(done) {
@@ -216,7 +216,7 @@ var resolveUrlAndTest = function(res) {
 
         options = {
           method: 'GET',
-          url: pidUrl + '/url?ref=' + res.id + '&token=' + timestamp,  // res.id pass to request, timestamp milliseconds prevent cached request
+          url: pidUrl + '?ref=' + res.id + '&token=' + timestamp,  // res.id pass to request, timestamp milliseconds prevent cached request
           auth: {
             'user': config.pidmanager_auth_user,
             'password': config.pidmanager_auth_pass
@@ -296,6 +296,7 @@ var resolveUrlAndTest = function(res) {
 var handlePIDManagerResponse = function(refID, body, callback) {
     //console.log('handle PID Manager resp: ' + refID);
     // Handle XML response from REST PID Manager
+    expect(body).to.exist;
     var pidUrlBody = new DOMParser().parseFromString(body, 'text/xml');
 
     var pidRef = _.chain(pidUrlBody.documentElement.getElementsByTagName('data'))
