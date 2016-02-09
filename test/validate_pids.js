@@ -245,7 +245,7 @@ var resolveUrlAndTest = function(res) {
         pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://' + config.handle_api_host + config.handle_api_path) : null;
         options = {
           method: 'GET',
-          url: pidUrl,
+          url: pidUrl + '?auth',
           headers: {
             'Cache-Control': 'no-cache'
           },
