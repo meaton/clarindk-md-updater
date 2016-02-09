@@ -385,10 +385,14 @@ var handleAPIResponse = function(refID, body, callback) {
 
 var isRefMatch = function(id, valUrl, isContentRef) {
   if(id != null && valUrl != null)
-    return (!isContentRef && valUrl.pathname.indexOf('handle/cmdi') > -1)
-      ? (valUrl.search && valUrl.search.indexOf('http') == 0 && url.parse(valUrl.search).pathname.lastIndexOf('/') + 1 == id)
-      : (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == id);
-  else return false;
+    if(!isContentRef && valUrl.pathname == "/handle/cmdi") {
+      console.log('search: ' + valUrl.search);
+      console.log('search parse: ' + url.parse(valUrl.search.substr(1, valUrl.search.length)).pathname)
+      return (valUrl.search && valUrl.search.indexOf('http') == 0 && url.parse(valUrl.search.substr(1, valUrl.search.length)).pathname.lastIndexOf('/') + 1 == id)
+    } else
+      return (valUrl.pathname.substr(valUrl.pathname.lastIndexOf('/') + 1) == id);
+  else
+    return false;
 };
 
 // parse records, iterate over resource proxies (pid refs)
