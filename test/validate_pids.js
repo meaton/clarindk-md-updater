@@ -213,7 +213,7 @@ var resolveUrlAndTest = function(res, actionTag) {
     var data = null;
 
     before(function(done) {
-      this.timeout(10000); //TODO: remain issues with timeout for reqs against hdl.handle.net
+      this.timeout(20000); //TODO: remain issues with timeout for reqs against hdl.handle.net
       var pidUrl, options;
 
       if(config.pidResolveService == "pidmanager") { // REST PID Manager url
