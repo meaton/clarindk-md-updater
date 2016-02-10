@@ -230,7 +230,7 @@ var resolveUrlAndTest = function(res, actionTag) {
             'password': config.pidmanager_auth_pass
           },
           headers: {
-            'Cache-Control': 'no-cache'
+            'Cache-Control': 'max-age=0, no-cache'
           },
           resolveWithFullResponse: true
         };
@@ -257,7 +257,7 @@ var resolveUrlAndTest = function(res, actionTag) {
           method: 'GET',
           url: pidUrl,
           headers: {
-            'Cache-Control': 'no-cache'
+            'Cache-Control': 'max-age=0, no-cache'
           },
           json: true
         };
