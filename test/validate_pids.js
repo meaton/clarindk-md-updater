@@ -229,6 +229,9 @@ var resolveUrlAndTest = function(res, actionTag) {
             'user': config.pidmanager_auth_user,
             'password': config.pidmanager_auth_pass
           },
+          headers: {
+            'Cache-Control': 'no-cache'
+          },
           resolveWithFullResponse: true
         };
 
@@ -248,9 +251,11 @@ var resolveUrlAndTest = function(res, actionTag) {
       } else if(config.pidResolveService == "handle") {
         // Handle.net API
         pidUrl = (res.ref != undefined) ? res.ref.replace('hdl:', 'http://' + config.handle_api_host + config.handle_api_path) : null;
+        if(config.handle_use_auth) pidUrl += '?auth';
+
         options = {
           method: 'GET',
-          url: pidUrl + '?auth',
+          url: pidUrl,
           headers: {
             'Cache-Control': 'no-cache'
           },

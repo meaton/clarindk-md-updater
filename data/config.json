@@ -18,5 +18,6 @@
   "pidmanager_auth_pass": "password",
   "pidmanager_prefix": "11221",
   "handle_api_host": "hdl.handle.net",
-  "handle_api_path": "/api/handles/"
+  "handle_api_path": "/api/handles/",
+  "handle_use_auth": true
 }
