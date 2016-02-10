@@ -169,7 +169,7 @@ var findInvalidPids = function(results) {
               }
             });
             if(selfLinkHdl != null) {
-              console.log('selfLinkHdl: ' + selfLinkHdl.ref);
+              //console.log('selfLinkHdl: ' + selfLinkHdl.ref);
               pidVal.push(selfLinkHdl);
             }
             callback(null, pidVal);
@@ -193,8 +193,9 @@ var findInvalidPids = function(results) {
     });
 
     after(function(done) {
+      this.timeout(0)
       _.each(records, function(val) {
-        _.each(val, function(res) { // utilise tag @ reference and --grep option to control test workflow 
+        _.each(val, function(res) { // utilise tag @ reference and --grep option to control test workflow
           if(res.ref != undefined && res.ref.indexOf('@md=cmdi') != -1)
             resolveUrlAndTest(res, '@resolve');
           else
@@ -285,6 +286,7 @@ var resolveUrlAndTest = function(res, actionTag) {
         context('when has body response', function() {
           it.only('should be a valid response', function(done) {
             this.timeout(10000);
+
             if(config.pidResolveService == "pidmanager")
               handlePIDManagerResponse(res.id, data, function(err) {
                 done(err);
