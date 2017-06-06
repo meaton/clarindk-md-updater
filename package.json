@@ -14,7 +14,6 @@
     "olac"
   ],
   "author": "Mitchell Seaton <seaton@hum.ku.dk>",
-  "homepage": "https://github.com/meaton/clarindk-md-updater",
   "maintainers": [
     {
       "name": "seaton",
@@ -41,8 +40,8 @@
     "clarindk-md-updater": "./bin/updater"
   },
   "scripts": {
+    "start": "./bin/updater",
     "test": "mocha -R spec",
-    "prepublish": "npm prune"
   },
   "main": "./lib/updater-cli.js",
   "engines": {
@@ -61,7 +60,7 @@
     "request": "^2.67.0",
     "request-promise": "^2.0.0",
     "underscore": "1.4.x",
-    "xml2json": "0.3.x",
+    "xml2json": "^0.9.0",
     "xmldom": "0.1.x"
   },
   "devDependencies": {
