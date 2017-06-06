@@ -3,6 +3,6 @@
 *.swo
 *.log
 conf/*.txt
-node_modules
-misc
-test/misc
+node_modules/
+misc/
+test/misc/
