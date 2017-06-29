@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "./bin/updater",
-    "test": "mocha -R spec",
+    "test": "mocha -R spec"
   },
   "main": "./lib/updater-cli.js",
   "engines": {
