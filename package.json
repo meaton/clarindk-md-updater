@@ -59,7 +59,7 @@
     "request": "^2.67.0",
     "request-promise": "^2.0.0",
     "underscore": "1.4.x",
-    "xml2json": "^0.9.0",
+    "xml2js": "^0.4.17",
     "xmldom": "0.1.x"
   },
   "devDependencies": {
