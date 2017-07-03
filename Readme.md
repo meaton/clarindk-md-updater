@@ -2,26 +2,26 @@
 
 A Node.js Flatiron-CLI application to retrieve and update [eSciDoc](http://www.escidoc.org) Metadata records (MD-Records) in [clarin.dk](http://www.clarin.dk).
 
-####Requirements
+#### Requirements
 * [Node.js](http://nodejs.org/) & [NPM](http://npmjs.org/)
 * [eSciDoc Metadata-Updater](https://github.com/escidoc/escidoc-metadata-updater)
 * [MongoDB](http://www.mongodb.org/)
 * [eSciDoc](http://www.escidoc.org) (>=1.3.x)
 
-####Installation
+#### Installation
 See https://github.com/joyent/node/wiki/Installation for installation of Node.js.
 
 ``$ npm install http://clarin.dk/packages/clarindk-md-updater-0.1.2.tgz``
 
-####MongoDB installation
+#### MongoDB installation
 [Installation](http://docs.mongodb.org/manual/installation/)
 
-####Usage
+#### Usage
 Run ``$ clarindk-md-updater help`` for usage details.
 
 - - -
 
-###Commands
+### Commands
 
 **config** [set|get|clear] *{field} {value}*
 
@@ -58,7 +58,7 @@ Removes existing Query record and associated metadata records from the session.
 
 - - -
 
-###Deploying eSciDoc Metadata-Updater
+### Deploying eSciDoc Metadata-Updater
 
 An RESTful updater service to eSciDoc. Additionally provides the service of retrieving metadata records for an item, in XML-format output. The XML can be edited and an updated document can be uploaded to eSciDoc via the service. Handles the authentication process with either eSciDoc handle cookie or Basic auth login method.
 
@@ -79,9 +79,9 @@ Running the tests:
 
 - - -
 
-###Appendix A: Default CLI Configuration
+### Appendix A: Default CLI Configuration
 
-#####Example config file data/config.JSON:
+##### Example config file data/config.JSON:
 >``
 {
   "directories": {},
@@ -95,9 +95,9 @@ Running the tests:
 }
 ``
 
-###Appendix B: Example JSON Change-Rules Configuration
+### Appendix B: Example JSON Change-Rules Configuration
 
-#####Override rule:
+##### Override rule:
 Replace the entire value selected with a new value.
 >``
 [{
@@ -115,7 +115,7 @@ Replace the entire value selected with a new value.
 }]
 ``
 
-#####Addition rule:
+##### Addition rule:
 Add a new Metadata element to the record, including defined attributes and text value.
 >``
 [{
@@ -132,7 +132,7 @@ Add a new Metadata element to the record, including defined attributes and text 
 }]
 ``
 
-#####Replace rule:
+##### Replace rule:
 Match and replace a string from the selected value and replace the first match found with the new value. Regular Expressions may be used also, and for global replacement.
 
 >``
