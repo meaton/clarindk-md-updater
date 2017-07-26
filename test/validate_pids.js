@@ -80,14 +80,14 @@ var findQuery = function() {
                             return done(err);
 
                         query.should.be.an('object');
-                        //expect(query._session._id).to.equal(session._id);
+                        //expect(query._session.id).to.equal(session.id);
 
                         done();
 
-                        if (query != null && query._session._id == session._id.toString()) // Session match
+                        if (query != null && query._session.id == session.id.toString()) // Session match
                             parseQuery(query); // update content PID with content PID with corrected url ref
                         else
-                            throw new Error("No Query found for Session: " + session._id);
+                            throw new Error("No Query found for Session: " + session.id);
                     });
             });
         });

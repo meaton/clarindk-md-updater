@@ -48,11 +48,12 @@
     "node": ">=0.12"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "cli-table": "0.2.x",
     "colors": "^1.1.x",
     "flatiron": "^0.4.0",
     "flatiron-cli-config": "0.1.x",
-    "mongoose": "^4.4.x",
+    "mongoose": "^4.11.1",
     "pkginfo": "0.3",
     "prettyjson": "^1.1.0",
     "prompt": "0.2.x",
