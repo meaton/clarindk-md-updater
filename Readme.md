@@ -14,9 +14,6 @@ See https://github.com/joyent/node/wiki/Installation for installation of Node.js
 Fetch the source code:
 ``$ git clone https://github.com/meaton/clarindk-md-updater.git``
 
-Checkout branch:
-``$ git checkout xml2js``
-
 Install the required NPM modules:
 ``$ npm install``
 
@@ -107,7 +104,7 @@ Default attribute (attrkey) and text (charkey) keys must be used for bi-directio
 
 ##### Override rule:
 Replace the entire value selected with a new value.
->``
+```json
 [{
   "change_type": "override",
   "field_position": { "olac:olac": "dc:contributor" },
@@ -121,11 +118,11 @@ Replace the entire value selected with a new value.
   "selector": "_",
   "set_value": "unspecified"
 }]
-``
+```
 
 ##### Addition rule:
 Add a new Metadata element to the record, including defined attributes and text value.
->``
+```json
 [{
   "change_type":"addition",
   "field_position":{
@@ -140,12 +137,12 @@ Add a new Metadata element to the record, including defined attributes and text 
      "_":"dsn.dk"
   }
 }]
-``
+```
 
 ##### Replace rule:
 Match and replace a string from the selected value and replace the first match found with the new value. Regular Expressions may be used also, and for global replacement.
 
->``
+```json
 [{
   "change_type":"replace",
   "field_position":{
@@ -158,4 +155,4 @@ Match and replace a string from the selected value and replace the first match f
   "selector": "_",
   "set_value": "cst.ku.dk"
 }]
-``
+```
