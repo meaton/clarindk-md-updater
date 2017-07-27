@@ -86,7 +86,7 @@ Running the tests:
 ### Appendix A: Default CLI Configuration
 
 ##### Example config file data/config.JSON:
->``
+```json
 {
   "directories": {},
   "escidoc_handle": "ESCIDOC-XXXXXXX",
@@ -95,10 +95,12 @@ Running the tests:
   “updaterHost”: “updater-host.domain”,
   “updaterPort”: “80”,
   "fullname": "Mitchell Seaton",
-  "email": "seaton@hum.ku.dk"
+  "email": "seaton@hum.ku.dk",
+  "attrkey: "$",
+  "charkey": "_"
 }
-``
-Default attribute (attrkey) and text (charkey) keys must be used for bi-directional conversion if submitting changes to the repository. 
+```
+Default attribute (attrkey) and text (charkey) key values must be used for bi-directional data conversion if submitting changes to the repository.
 
 ### Appendix B: Example JSON Change-Rules Configuration
 
