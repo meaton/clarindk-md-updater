@@ -3,15 +3,22 @@
 A Node.js Flatiron-CLI application to retrieve and update [eSciDoc](http://www.escidoc.org) Metadata records (MD-Records) in [clarin.dk](http://www.clarin.dk).
 
 #### Requirements
-* [Node.js](http://nodejs.org/) & [NPM](http://npmjs.org/)
+* [Node.js](http://nodejs.org/) & [NPM](http://npmjs.org/) (recommended >=4.8.x)
 * [eSciDoc Metadata-Updater](https://github.com/escidoc/escidoc-metadata-updater)
-* [MongoDB](http://www.mongodb.org/)
-* [eSciDoc](http://www.escidoc.org) (>=1.3.x)
+* [MongoDB](http://www.mongodb.org/) (recommended 3.2 or higher)
+* [eSciDoc](http://www.escidoc.org) (1.3.x)
 
 #### Installation
 See https://github.com/joyent/node/wiki/Installation for installation of Node.js.
 
-``$ npm install http://clarin.dk/packages/clarindk-md-updater-0.1.2.tgz``
+Fetch the source code:
+``$ git clone https://github.com/meaton/clarindk-md-updater.git``
+
+Checkout branch:
+``$ git checkout xml2js``
+
+Install the required NPM modules:
+``$ npm install``
 
 #### MongoDB installation
 [Installation](http://docs.mongodb.org/manual/installation/)
@@ -94,6 +101,7 @@ Running the tests:
   "email": "seaton@hum.ku.dk"
 }
 ``
+Default attribute (attrkey) and text (charkey) keys must be used for bi-directional conversion if submitting changes to the repository. 
 
 ### Appendix B: Example JSON Change-Rules Configuration
 
@@ -104,13 +112,13 @@ Replace the entire value selected with a new value.
   "change_type": "override",
   "field_position": { "olac:olac": "dc:contributor" },
   "conditions": { "olac:code": "sponsor" },
-  "selector": "$t",
+  "selector": "_",
   "set_value": "DK-CLARIN"
 },
 {
   "change_type": "override",
   "field_position": { "olac:olac": "dc:subject" },
-  "selector": "$t",
+  "selector": "_",
   "set_value": "unspecified"
 }]
 ``
@@ -124,10 +132,12 @@ Add a new Metadata element to the record, including defined attributes and text 
      "olac:olac":"dc:contributor"
   },
   "properties":{
-     "xmlns:dc":"http://purl.org/dc/elements/1.1/",
-     "olac:code":"depositor",
-     "xsi:type":"olac:role",
-     "$t":"dsn.dk"
+     "$": {
+        "xmlns:dc":"http://purl.org/dc/elements/1.1/",
+        "olac:code":"depositor",
+        "xsi:type":"olac:role",
+     },
+     "_":"dsn.dk"
   }
 }]
 ``
@@ -145,7 +155,7 @@ Match and replace a string from the selected value and replace the first match f
      "olac:code": "sponsor",
      "$match": "DK-CLARIN"
   },
-  "selector": "$t",
+  "selector": "_",
   "set_value": "cst.ku.dk"
 }]
 ``
