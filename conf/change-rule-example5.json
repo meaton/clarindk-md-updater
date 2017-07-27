@@ -1,0 +1,43 @@
+[
+    {
+        "change_type": "override",
+        "field_position": {
+            "olac:olac": "dc:language"
+        },
+        "add_attr": "true",
+        "selector": "xsi:type",
+        "set_value": "olac:language"
+    },
+    {
+        "change_type": "override",
+        "field_position": {
+            "olac:olac": "dc:language"
+        },
+        "conditions": {
+            "_": "da"
+        },
+        "add_attr": "true",
+        "selector": "olac:code",
+        "set_value": "da"
+    },
+    {
+        "change_type": "override",
+        "field_position": {
+            "olac:olac": "dc:language"
+        },
+        "conditions": {
+            "_": "en"
+        },
+        "add_attr": "true",
+        "selector": "olac:code",
+        "set_value": "en"
+    },
+    {
+        "change_type": "override",
+        "field_position": {
+            "olac:olac": "dc:language"
+        },
+        "selector": "_",
+        "set_value": ""
+    }
+]

@@ -1,0 +1,14 @@
+[{
+    "change_type": "addition",
+    "field_position": {
+        "olac:olac": "dc:contributor"
+    },
+    "properties": {
+        "$": {
+            "xmlns:dc": "http://purl.org/dc/elements/1.1/",
+            "olac:code": "depositor",
+            "xsi:type": "olac:role"
+        },
+        "_": "dsl.dk"
+    }
+}]

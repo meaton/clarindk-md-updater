@@ -1,0 +1,12 @@
+[{
+  "change_type":"replace",
+  "field_position":{
+     "olac:olac":"dc:contributor"
+  },
+  "conditions": {
+     "olac:code": "sponsor",
+     "$match": "DK-CLARIN"
+  },
+  "selector": "_",
+  "set_value": "cst.ku.dk"
+}]

@@ -1,0 +1,14 @@
+[{
+    "change_type": "override",
+    "field_position": {
+        "olac:olac": "dc:contributor"
+    },
+    "conditions": {
+        "$": {
+            "olac:code": "depositor"
+        },
+        "_": "DK-CLARIN-WP22"
+    },
+    "selector": "_",
+    "set_value": "DK-CLARIN"
+}]

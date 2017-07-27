@@ -4,7 +4,7 @@
       "field_position":{
          "olac:olac":"dc:subject"
       },
-      "selector":"$t",
+      "selector":"_",
       "set_value":"unspecified"
    }
 ]
