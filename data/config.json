@@ -1,6 +1,6 @@
 {
     "directories": {},
-    "escidoc_handle": "ESCIDOC-XrcA3WCAJm1501034328818",
+    "escidoc_handle": "ESCIDOC-bkbrJJgej11501121550440",
     "mongoose_auth": "mongodb://localhost/clarindk_metadata_test",
     "targetUrl": "http://devtools.clarin.dk",
     "targetQuery": "",
@@ -11,6 +11,9 @@
     "colors": true,
     "useBatch": false,
     "batchLimit": "10",
+    "parserAttrkey": "$",
+    "parserCharkey": "_",
+    "parserExplicitArray": true,
     "pidResolveService": "pidmanager",
     "pidmanager_host": "devtools.clarin.dk",
     "pidmanager_path": "/pidmanager/pid/handle/",
