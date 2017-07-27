@@ -96,11 +96,11 @@ Running the tests:
   “updaterPort”: “80”,
   "fullname": "Mitchell Seaton",
   "email": "seaton@hum.ku.dk",
-  "attrkey: "$",
-  "charkey": "_"
+  "parserAttrkey: "$",
+  "parserCharkey": "_"
 }
 ```
-Default attribute (attrkey) and text (charkey) key values must be used for bi-directional data conversion if submitting changes to the repository.
+Default attribute (parserAttrkey) and text (parserCharkey) key values must not be changed if submitting changes to the repository.
 
 ### Appendix B: Example JSON Change-Rules Configuration
 
