@@ -1,6 +1,6 @@
 {
   "name": "clarindk-md-updater",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "A CLI for Metadata Record updates to CLARIN-DK via eSciDoc MD-Updater RESTful service.",
   "keywords": [
     "cli",
